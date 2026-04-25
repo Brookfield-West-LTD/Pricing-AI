@@ -14,7 +14,7 @@ FROM oven/bun:1 AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN cd apps/api && bun run build
+RUN cd apps/api && /app/node_modules/.bin/nest build
 
 FROM oven/bun:1 AS runner
 WORKDIR /app
