@@ -7,7 +7,7 @@ COPY packages/ui/package.json ./packages/ui/
 COPY packages/shared/package.json ./packages/shared/
 COPY packages/tokens/package.json ./packages/tokens/
 COPY packages/zod-schemas/package.json ./packages/zod-schemas/
-RUN bun install; test -d node_modules/next
+RUN bun install --ignore-scripts; test -d node_modules/next
 
 FROM oven/bun:1 AS builder
 WORKDIR /app

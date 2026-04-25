@@ -8,7 +8,7 @@ COPY packages/shared/package.json ./packages/shared/
 COPY packages/sizing-engine/package.json ./packages/sizing-engine/
 COPY packages/tokens/package.json ./packages/tokens/
 COPY packages/zod-schemas/package.json ./packages/zod-schemas/
-RUN bun install --frozen-lockfile
+RUN bun install
 
 FROM oven/bun:1 AS builder
 WORKDIR /app
