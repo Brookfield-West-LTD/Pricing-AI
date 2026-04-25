@@ -1,0 +1,142 @@
+/* Volt Horizon — UI kit helpers for Pricing AI onboarding */
+
+/* Pria conic-chromatic avatar */
+.vh-pria {
+  position: relative;
+  border-radius: 50%;
+  background:
+    conic-gradient(from 140deg at 50% 50%,
+      #FF6B35 0%, #7BFFAB 22%, #58C8FF 48%, #FF6B35 72%, #7BFFAB 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.1),
+    0 10px 28px -10px rgba(0,0,0,0.7),
+    0 0 22px -4px rgba(255,107,53,0.35);
+  animation: vh-spin 18s linear infinite;
+  flex-shrink: 0;
+}
+.vh-pria::before {
+  content: "";
+  position: absolute; inset: 6px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,0.28), transparent 55%),
+    var(--vh-surface-000);
+}
+@keyframes vh-spin { to { transform: rotate(360deg); } }
+
+/* Atmospheric voltage pulse dot */
+.vh-dot-live {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--vh-bio);
+  box-shadow: 0 0 10px 0 var(--vh-bio);
+  animation: vh-pulse 1.8s ease-out infinite;
+}
+.vh-dot-voltage {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--vh-voltage);
+  box-shadow: 0 0 10px 0 var(--vh-voltage);
+  animation: vh-pulse 1.8s ease-out infinite;
+}
+@keyframes vh-pulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+
+/* Step-in animation tokens — forwards fill only (not backwards)
+   so content is visible even if the animation frame never actually ticks */
+@keyframes vh-up   { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: none; } }
+@keyframes vh-in   { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes vh-pop  { 0% { opacity: 0; transform: scale(0.96); } 100% { opacity: 1; transform: none; } }
+.vh-up  { animation: vh-up 560ms cubic-bezier(.16,1,.3,1) forwards; }
+.vh-in  { animation: vh-in 320ms ease forwards; }
+.vh-pop { animation: vh-pop 320ms cubic-bezier(.2,.7,.2,1) forwards; }
+.vh-d1 { animation-delay: .05s; } .vh-d2 { animation-delay: .12s; }
+.vh-d3 { animation-delay: .20s; } .vh-d4 { animation-delay: .28s; }
+.vh-d5 { animation-delay: .36s; } .vh-d6 { animation-delay: .44s; }
+.vh-d7 { animation-delay: .52s; } .vh-d8 { animation-delay: .60s; }
+
+/* Buttons */
+.vh-btn {
+  font-family: var(--vh-font-body); font-weight: 600; font-size: 14px;
+  letter-spacing: -0.005em; padding: 13px 22px; border-radius: 999px;
+  border: 1px solid transparent; cursor: pointer; display: inline-flex;
+  align-items: center; gap: 10px; transition: all 180ms cubic-bezier(.2,.7,.2,1);
+  white-space: nowrap;
+}
+.vh-btn[disabled] { cursor: not-allowed; opacity: .5; }
+.vh-btn-primary {
+  background: linear-gradient(180deg, var(--vh-voltage-hot) 0%, var(--vh-voltage) 55%, var(--vh-voltage-deep) 100%);
+  color: var(--vh-void);
+  box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 10px 28px -8px rgba(255,107,53,.55);
+}
+.vh-btn-primary:not([disabled]):hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255,255,255,.3) inset, 0 14px 34px -8px rgba(255,107,53,.7); }
+.vh-btn-secondary {
+  background: var(--vh-surface-200);
+  color: var(--vh-text-000);
+  border-color: var(--vh-line);
+}
+.vh-btn-secondary:hover { background: var(--vh-surface-300); }
+.vh-btn-ghost { background: transparent; color: var(--vh-text-200); border-color: transparent; }
+.vh-btn-ghost:hover { color: var(--vh-text-000); }
+
+/* Tile for option cards */
+.vh-tile {
+  background: var(--vh-surface-100);
+  border: 1px solid var(--vh-line);
+  border-radius: var(--vh-r-lg);
+  padding: 18px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 220ms cubic-bezier(.2,.7,.2,1);
+  color: var(--vh-text-000);
+  font-family: var(--vh-font-body);
+}
+.vh-tile:hover { border-color: var(--vh-line-hot); transform: translateY(-2px); }
+.vh-tile[data-selected="true"] {
+  border-color: var(--vh-voltage);
+  background: linear-gradient(180deg, rgba(255,107,53,0.10), rgba(255,107,53,0.02));
+  box-shadow: 0 0 0 1px rgba(255,107,53,0.35), 0 18px 40px -18px rgba(255,107,53,0.35);
+}
+
+/* Pill */
+.vh-pill {
+  padding: 9px 16px; border-radius: 999px;
+  border: 1px solid var(--vh-line); background: var(--vh-surface-100);
+  font-family: var(--vh-font-body); font-size: 13px; color: var(--vh-text-100);
+  cursor: pointer; transition: all 180ms cubic-bezier(.2,.7,.2,1);
+}
+.vh-pill:hover { border-color: var(--vh-line-hot); color: var(--vh-text-000); }
+.vh-pill[data-selected="true"] {
+  background: var(--vh-voltage); color: var(--vh-void); border-color: var(--vh-voltage);
+}
+
+/* Field */
+.vh-field {
+  background: var(--vh-surface-100);
+  border: 1px solid var(--vh-line);
+  border-radius: var(--vh-r-md);
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  transition: all 180ms cubic-bezier(.2,.7,.2,1);
+}
+.vh-field:focus-within {
+  border-color: var(--vh-voltage);
+  box-shadow: 0 0 0 3px rgba(255,107,53,0.18);
+}
+.vh-field input {
+  flex: 1; background: transparent; border: 0; outline: none;
+  font-family: var(--vh-font-body); color: var(--vh-text-000); font-size: 15px;
+}
+.vh-field input::placeholder { color: var(--vh-text-300); }
+
+/* Receipt rule */
+.vh-receipt-rule {
+  height: 1px;
+  background-image: linear-gradient(to right, var(--vh-line) 50%, transparent 50%);
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+}
+
+/* Stepper dots */
+.vh-step-dot {
+  width: 18px; height: 2px; background: var(--vh-line); transition: background 300ms;
+}
+.vh-step-dot[data-active="true"]  { background: var(--vh-voltage); }
+.vh-step-dot[data-done="true"]    { background: var(--vh-text-200); }

@@ -1,0 +1,367 @@
+/* Volt Horizon — Pria agentic substrate
+   Ambient invitations · inline composer · voice orb · form rescue
+   Motion principle: every Pria transition rides cubic-bezier(.16,1,.3,1) @ 320ms.
+*/
+
+/* ===================================================================
+   AVATAR · the chromatic conic gradient is Pria's pulse
+=================================================================== */
+
+/* Canonical Pria orb — spins 8s/rev by default */
+.pria-orb {
+  position: relative;
+  border-radius: 50%;
+  background:
+    conic-gradient(from 140deg at 50% 50%,
+      #FF6B35 0%, #7BFFAB 22%, #58C8FF 48%, #FF6B35 72%, #7BFFAB 100%);
+  animation: pria-spin 8s linear infinite;
+  flex-shrink: 0;
+}
+.pria-orb::before {
+  content: "";
+  position: absolute; inset: 14%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,0.32), transparent 58%),
+    var(--vh-surface-000);
+}
+@keyframes pria-spin { to { transform: rotate(360deg); } }
+
+/* Halo — voltage pulse ring that breathes (1.8s) — for idle icons */
+.pria-halo {
+  position: relative;
+  display: inline-flex;
+}
+.pria-halo::after {
+  content: "";
+  position: absolute; inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,107,53,0.55);
+  box-shadow: 0 0 0 0 rgba(255,107,53,0.25);
+  animation: pria-halo 1.8s cubic-bezier(.4,0,.2,1) infinite;
+  pointer-events: none;
+}
+@keyframes pria-halo {
+  0%   { transform: scale(1);    opacity: .75; }
+  70%  { transform: scale(1.35); opacity: 0;   }
+  100% { transform: scale(1.35); opacity: 0;   }
+}
+
+/* ===================================================================
+   AMBIENT INVITATION · terminal-style typing text beside the icon
+=================================================================== */
+
+.pria-invite {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--vh-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--vh-voltage);
+  text-transform: lowercase;
+  white-space: nowrap;
+  transition: opacity 480ms ease;
+}
+.pria-invite[data-hidden="true"] { opacity: 0; pointer-events: none; }
+
+/* blinking voltage cursor */
+.pria-caret::after {
+  content: "▍";
+  color: var(--vh-voltage);
+  margin-left: 1px;
+  animation: pria-caret 900ms steps(1) infinite;
+}
+.pria-caret[data-done="true"]::after { content: ""; }
+@keyframes pria-caret { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+
+/* ===================================================================
+   INLINE COMPOSER · the growing pill
+   icon (28px) -> pill (~480×52) -> response card opens below
+=================================================================== */
+
+.pria-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 52px; width: 480px; max-width: 92vw;
+  padding: 8px 10px 8px 14px;
+  border-radius: 999px;
+  background: var(--vh-surface-200);
+  border: 1px solid var(--vh-voltage-deep);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.04) inset,
+    0 18px 44px -18px rgba(255,107,53,0.45),
+    0 0 0 1px rgba(255,107,53,0.15);
+  /* grow from 28 on open */
+  animation: pria-pill-grow 320ms cubic-bezier(.16,1,.3,1) both;
+  transform-origin: left center;
+}
+@keyframes pria-pill-grow {
+  0%   { width: 28px; opacity: 0.2; }
+  40%  { opacity: 1; }
+  100% { width: 480px; opacity: 1; }
+}
+
+.pria-pill input {
+  flex: 1;
+  background: transparent;
+  border: 0; outline: none;
+  font-family: var(--vh-font-body);
+  font-size: 14px;
+  color: var(--vh-text-000);
+}
+.pria-pill input::placeholder { color: var(--vh-text-300); }
+
+/* little icon buttons inside pill */
+.pria-pill-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--vh-line);
+  background: var(--vh-surface-300);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--vh-text-100);
+  cursor: pointer;
+  transition: all 180ms cubic-bezier(.2,.7,.2,1);
+}
+.pria-pill-btn:hover { color: var(--vh-text-000); border-color: var(--vh-line-hot); }
+.pria-pill-btn-mic {
+  background: var(--vh-surface-000);
+  border-color: var(--vh-voltage-deep);
+  color: var(--vh-voltage);
+}
+.pria-pill-btn-mic:hover { background: rgba(255,107,53,0.12); }
+
+/* Response card — opens downward under the pill */
+.pria-response {
+  position: relative;
+  margin-top: 8px;
+  width: 480px; max-width: 92vw;
+  background: var(--vh-surface-100);
+  border: 1px solid var(--vh-line);
+  border-radius: var(--vh-r-lg);
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 18px 20px 16px;
+  font-family: var(--vh-font-body);
+  color: var(--vh-text-000);
+  font-size: 14px; line-height: 1.55;
+  box-shadow: 0 22px 60px -22px rgba(0,0,0,0.65);
+  animation: pria-response-in 320ms cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes pria-response-in {
+  0%   { opacity: 0; transform: translateY(-6px) scale(.99); }
+  100% { opacity: 1; transform: none; }
+}
+.pria-response-close {
+  position: absolute; top: 10px; right: 10px;
+  font-family: var(--vh-font-mono); font-size: 10px;
+  letter-spacing: .18em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 999px;
+  background: transparent; border: 1px solid var(--vh-line);
+  color: var(--vh-text-300); cursor: pointer;
+}
+.pria-response-close:hover { color: var(--vh-text-000); border-color: var(--vh-line-hot); }
+
+/* ===================================================================
+   VOICE · persistent button + active voice card
+=================================================================== */
+
+/* idle bottom-right button */
+.pria-voice-btn {
+  position: fixed;
+  bottom: 22px; right: 22px;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 60;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 0;
+  background: transparent;
+  box-shadow:
+    0 18px 44px -14px rgba(0,0,0,0.7),
+    0 0 26px -4px rgba(255,107,53,0.45);
+  animation: pria-voice-halo 1.8s ease-in-out infinite;
+  overflow: visible;
+}
+@keyframes pria-voice-halo {
+  0%,100% { box-shadow: 0 18px 44px -14px rgba(0,0,0,0.7), 0 0 20px -4px rgba(255,107,53,0.35); }
+  50%     { box-shadow: 0 18px 44px -14px rgba(0,0,0,0.7), 0 0 34px -2px rgba(255,107,53,0.65); }
+}
+.pria-voice-btn .pria-orb { width: 100%; height: 100%; }
+
+.pria-voice-btn-label {
+  position: absolute; right: 68px; top: 50%; transform: translateY(-50%);
+  background: var(--vh-surface-200); border: 1px solid var(--vh-line);
+  padding: 6px 12px; border-radius: 999px;
+  font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--vh-text-100); white-space: nowrap;
+  opacity: 0; transition: opacity 200ms ease;
+  pointer-events: none;
+}
+.pria-voice-btn:hover .pria-voice-btn-label { opacity: 1; }
+
+/* Active voice card */
+.pria-voice-card {
+  position: fixed;
+  bottom: 22px; right: 22px;
+  width: 360px; height: 260px;
+  background: var(--vh-surface-100);
+  border: 1px solid var(--vh-line);
+  border-radius: var(--vh-r-xl);
+  box-shadow: 0 28px 70px -18px rgba(0,0,0,0.75);
+  z-index: 60;
+  padding: 14px 16px;
+  display: flex; flex-direction: column;
+  backdrop-filter: blur(12px);
+  animation: pria-voice-card-in 320ms cubic-bezier(.16,1,.3,1) both;
+  overflow: hidden;
+}
+@keyframes pria-voice-card-in {
+  0%   { opacity: 0; transform: translateY(14px) scale(.96); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* orb that breathes + listens */
+.pria-big-orb {
+  width: 96px; height: 96px;
+  position: relative;
+  animation: pria-breathe 3.6s ease-in-out infinite;
+}
+@keyframes pria-breathe {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.06); }
+}
+.pria-big-orb[data-state="listening"] { animation: pria-breathe-slow 4.4s ease-in-out infinite; }
+@keyframes pria-breathe-slow {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.03); }
+}
+.pria-big-orb[data-state="speaking"] { animation: pria-breathe-fast 1.4s ease-in-out infinite; }
+@keyframes pria-breathe-fast {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.08); }
+}
+
+/* ring of bars — simulated via many slim divs placed around the orb */
+.pria-waveform {
+  position: absolute; inset: -28px;
+  display: block;
+  pointer-events: none;
+}
+.pria-wave-bar {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 2px; height: 10px;
+  border-radius: 1px;
+  background: var(--vh-surface-300);
+  transform-origin: 50% 84px; /* rotates around orb center (radius ≈ orb half + gap) */
+  animation: pria-wave 1.4s ease-in-out infinite;
+}
+@keyframes pria-wave {
+  0%,100% { transform: translate(-50%, -50%) rotate(var(--rot)) translateY(-66px) scaleY(0.4); }
+  50%     { transform: translate(-50%, -50%) rotate(var(--rot)) translateY(-66px) scaleY(var(--amp, 1.4)); }
+}
+.pria-waveform[data-state="listening"] .pria-wave-bar { background: var(--vh-bio); }
+.pria-waveform[data-state="speaking"]  .pria-wave-bar { background: var(--vh-voltage); }
+.pria-waveform[data-state="idle"]      .pria-wave-bar { background: var(--vh-surface-300); animation-duration: 4s; }
+
+/* status pill */
+.pria-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--vh-font-mono); font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase;
+  background: var(--vh-surface-200);
+  padding: 5px 10px; border-radius: 999px;
+  border: 1px solid var(--vh-line);
+  color: var(--vh-text-100);
+}
+.pria-status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--vh-voltage);
+  box-shadow: 0 0 8px var(--vh-voltage);
+  animation: vh-pulse 1.8s ease-out infinite;
+}
+.pria-status-dot[data-kind="bio"]     { background: var(--vh-bio);     box-shadow: 0 0 8px var(--vh-bio);     }
+.pria-status-dot[data-kind="voltage"] { background: var(--vh-voltage); box-shadow: 0 0 8px var(--vh-voltage); }
+.pria-status-dot[data-kind="think"]   { background: var(--vh-horizon); box-shadow: 0 0 8px var(--vh-horizon); }
+
+/* thinking dots */
+.pria-think-dots span {
+  display: inline-block; width: 3px; height: 3px; border-radius: 50%;
+  background: var(--vh-horizon);
+  margin: 0 1px;
+  animation: pria-think 1.2s ease-in-out infinite;
+}
+.pria-think-dots span:nth-child(2) { animation-delay: .15s; }
+.pria-think-dots span:nth-child(3) { animation-delay: .3s; }
+@keyframes pria-think {
+  0%,100% { opacity: 0.3; transform: translateY(0); }
+  50%     { opacity: 1;   transform: translateY(-2px); }
+}
+
+/* mini ghost buttons */
+.pria-ghost-mini {
+  font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  background: transparent; border: 1px solid var(--vh-line);
+  padding: 6px 12px; border-radius: 999px;
+  color: var(--vh-text-200); cursor: pointer;
+  transition: all 180ms cubic-bezier(.2,.7,.2,1);
+}
+.pria-ghost-mini:hover { color: var(--vh-text-000); border-color: var(--vh-line-hot); }
+
+/* ===================================================================
+   FORM RESCUE · the helper card under the form
+=================================================================== */
+
+.pria-helper {
+  position: relative;
+  background: var(--vh-surface-100);
+  border: 1px solid var(--vh-line);
+  border-radius: var(--vh-r-lg);
+  padding: 16px 18px 16px 18px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+.pria-helper::before {
+  /* voltage top accent, 3px */
+  content: "";
+  position: absolute; left: 0; right: 0; top: 0; height: 3px;
+  background: linear-gradient(90deg, var(--vh-voltage-deep), var(--vh-voltage), var(--vh-voltage-hot));
+}
+
+.pria-chip {
+  font-family: var(--vh-font-body); font-size: 13px;
+  padding: 10px 16px; border-radius: 999px;
+  background: transparent;
+  border: 1px solid var(--vh-line);
+  color: var(--vh-text-100);
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: all 180ms cubic-bezier(.2,.7,.2,1);
+}
+.pria-chip:hover {
+  background: var(--vh-surface-200);
+  border-color: var(--vh-voltage);
+  color: var(--vh-text-000);
+}
+
+/* ===================================================================
+   AI-ADDED element signature · 600ms voltage-glow fade-in
+=================================================================== */
+
+.pria-added {
+  animation: pria-added 600ms cubic-bezier(.16,1,.3,1) both;
+  box-shadow: 0 0 0 1px var(--vh-voltage), 0 0 26px -2px rgba(255,107,53,0.55);
+}
+@keyframes pria-added {
+  0%   { opacity: 0; transform: scale(0.94); box-shadow: 0 0 0 1px var(--vh-voltage), 0 0 32px 2px rgba(255,107,53,0.95); }
+  60%  { opacity: 1; transform: scale(1.02); }
+  100% { opacity: 1; transform: none;        box-shadow: 0 0 0 1px var(--vh-voltage), 0 0 18px -2px rgba(255,107,53,0.35); }
+}
+.pria-added-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--vh-font-mono); font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--vh-voltage);
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pria-orb, .pria-halo::after, .pria-big-orb, .pria-wave-bar, .pria-voice-btn,
+  .pria-status-dot, .pria-think-dots span { animation: none !important; }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "pricing-ai",
+  "private": true,
+  "packageManager": "bun@1.3.11",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "db:generate": "cd apps/api && bunx prisma generate",
+    "db:migrate": "cd apps/api && bunx prisma migrate dev",
+    "db:studio": "cd apps/api && bunx prisma studio"
+  },
+  "devDependencies": {
+    "turbo": "latest",
+    "typescript": "^5.5",
+    "prettier": "^3",
+    "@types/node": "^20"
+  }
+}

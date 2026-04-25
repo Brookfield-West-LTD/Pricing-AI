@@ -1,0 +1,9 @@
+{
+  "name": "@pricing-ai/tokens",
+  "private": true,
+  "version": "0.0.1",
+  "main": "./src/index.css",
+  "exports": {
+    ".": "./src/index.css"
+  }
+}

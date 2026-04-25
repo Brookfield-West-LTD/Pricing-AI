@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background: var(--vh-surface-000); min-height: 100vh; display:flex; }
+  .card { flex:1; display:flex; gap:14px; }
+  .swatch {
+    flex:1; border-radius: var(--vh-r-lg); padding: 20px; min-height: 180px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    border: 1px solid var(--vh-line); position:relative; overflow:hidden;
+  }
+  .swatch.bio {
+    background: radial-gradient(circle at 30% 30%, var(--vh-bio), var(--vh-bio-deep) 60%, #0B2417 130%);
+    color: #041A0E;
+  }
+  .swatch.bio .name, .swatch.bio .label, .swatch.bio .meta { color: #041A0E; }
+  .swatch.bio .meta strong { color: rgba(4,26,14,.55); }
+  .swatch.horizon {
+    background: radial-gradient(circle at 30% 30%, var(--vh-horizon), var(--vh-horizon-deep) 60%, #061A2A 130%);
+    color: #F4F8FB;
+  }
+  .label { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing:.18em; text-transform:uppercase; }
+  .name { font-family: var(--vh-font-display); font-weight: 300; font-size: 36px; line-height: .95; letter-spacing: -0.025em; margin-top: 6px; }
+  .name em { font-style: italic; font-weight: 500; }
+  .meta { font-family: var(--vh-font-mono); font-size: 11px; display:grid; gap:3px; }
+  .meta strong { font-weight: 500; font-size: 9px; letter-spacing:.1em; text-transform: uppercase; margin-right: 8px; }
+</style></head>
+<body class="vh-atmosphere">
+  <div class="card">
+    <div class="swatch bio">
+      <div>
+        <div class="label">SECONDARY · BIO</div>
+        <div class="name">Photo<em>synthesis</em></div>
+      </div>
+      <div class="meta">
+        <div><strong>HEX</strong>#7BFFAB</div>
+        <div><strong>USE</strong>LIVE · PRODUCING · SUCCESS</div>
+        <div><strong>RULE</strong>NEVER A PRIMARY CTA</div>
+      </div>
+    </div>
+    <div class="swatch horizon">
+      <div>
+        <div class="label">TERTIARY · HORIZON</div>
+        <div class="name">Cold <em>data</em></div>
+      </div>
+      <div class="meta">
+        <div><strong>HEX</strong>#58C8FF</div>
+        <div><strong>USE</strong>INFORMATIONAL DATA · LABELS</div>
+        <div><strong>RULE</strong>NEVER A PRIMARY CTA</div>
+      </div>
+    </div>
+  </div>
+</body></html>

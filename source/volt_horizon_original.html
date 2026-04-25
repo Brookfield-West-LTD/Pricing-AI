@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Volt Horizon — Pricing AI Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,500&family=Inter+Tight:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* =========================================================
+     VOLT HORIZON — Design System Tokens
+     ========================================================= */
+  :root {
+    /* Core surface — deep pre-dawn */
+    --vh-void:         #05080C;   /* deepest, used for shadow wells   */
+    --vh-surface-000:  #0A0F14;   /* page background                   */
+    --vh-surface-100:  #0F1620;   /* raised surface                    */
+    --vh-surface-200:  #17202B;   /* card                              */
+    --vh-surface-300:  #1F2B38;   /* interactive hover                 */
+    --vh-line:         #24323F;   /* hairline dividers                 */
+    --vh-line-hot:     #34495B;   /* emphasized dividers               */
+
+    /* Text */
+    --vh-text-000:     #F4F8FB;   /* primary                           */
+    --vh-text-100:     #C8D4E0;   /* body                              */
+    --vh-text-200:     #8A9AAD;   /* muted / captions                  */
+    --vh-text-300:     #5A6B7F;   /* faint / placeholder               */
+
+    /* Primary accent — "first voltage"
+       A hot electric coral-amber — unmistakable, signals action */
+    --vh-voltage:      #FF6B35;
+    --vh-voltage-hot:  #FF8A5C;
+    --vh-voltage-deep: #D94E1F;
+    --vh-voltage-glow: rgba(255, 107, 53, 0.35);
+
+    /* Secondary accent — "photosynthesis"
+       Biological green, signals "alive / producing / healthy" */
+    --vh-bio:          #7BFFAB;
+    --vh-bio-deep:     #3EDB7A;
+    --vh-bio-glow:     rgba(123, 255, 171, 0.3);
+
+    /* Tertiary — "horizon"
+       Cold cyan, used for informational data, never primary CTAs */
+    --vh-horizon:      #58C8FF;
+    --vh-horizon-deep: #2896D1;
+
+    /* Semantic */
+    --vh-warn:         #FFB547;
+    --vh-danger:       #FF5470;
+    --vh-success:      var(--vh-bio-deep);
+
+    /* Type */
+    --vh-font-display: 'Fraunces', 'Times New Roman', serif;
+    --vh-font-body:    'Inter Tight', system-ui, sans-serif;
+    --vh-font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+    /* Motion */
+    --vh-ease:         cubic-bezier(0.2, 0.7, 0.2, 1);
+    --vh-ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+    --vh-fast:         180ms;
+    --vh-base:         320ms;
+    --vh-slow:         560ms;
+
+    /* Radius scale */
+    --vh-r-xs: 6px;
+    --vh-r-sm: 10px;
+    --vh-r-md: 14px;
+    --vh-r-lg: 20px;
+    --vh-r-xl: 28px;
+    --vh-r-full: 999px;
+
+    /* Elevation — using colored glows, not grey shadows */
+    --vh-elev-1: 0 1px 0 rgba(255,255,255,0.04) inset,
+                 0 10px 30px -10px rgba(0,0,0,0.6);
+    --vh-elev-2: 0 1px 0 rgba(255,255,255,0.06) inset,
+                 0 20px 60px -20px rgba(0,0,0,0.75);
+    --vh-elev-glow: 0 0 0 1px rgba(255, 107, 53, 0.35),
+                    0 20px 60px -20px rgba(255, 107, 53, 0.45);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--vh-surface-000); color: var(--vh-text-000); }
+  body {
+    font-family: var(--vh-font-body);
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% -10%, rgba(255, 107, 53, 0.12), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 10%, rgba(88, 200, 255, 0.08), transparent 60%),
+      radial-gradient(ellipse 70% 60% at 50% 110%, rgba(123, 255, 171, 0.06), transparent 60%),
+      var(--vh-surface-000);
+    min-height: 100vh;
+  }
+
+  /* grain overlay */
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.5; pointer-events: none; z-index: 100; mix-blend-mode: overlay;
+  }
+
+  /* Layout */
+  .vh-shell {
+    max-width: 1280px; margin: 0 auto; padding: 64px 32px 120px;
+    position: relative; z-index: 1;
+  }
+
+  /* =========================================================
+     COVER
+     ========================================================= */
+  .vh-cover {
+    position: relative; padding: 100px 0 80px;
+    border-bottom: 1px solid var(--vh-line);
+  }
+  .vh-eyebrow {
+    font-family: var(--vh-font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--vh-text-200); margin-bottom: 28px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .vh-eyebrow::before {
+    content: ''; width: 40px; height: 1px; background: var(--vh-voltage);
+  }
+  .vh-h1 {
+    font-family: var(--vh-font-display);
+    font-weight: 300; font-size: clamp(56px, 10vw, 128px);
+    line-height: 0.92; letter-spacing: -0.035em;
+    margin-bottom: 20px;
+  }
+  .vh-h1 em {
+    font-style: italic; font-weight: 500;
+    background: linear-gradient(105deg, var(--vh-voltage) 0%, var(--vh-voltage-hot) 60%, var(--vh-bio) 130%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .vh-lede {
+    font-size: 20px; max-width: 620px; color: var(--vh-text-100);
+    margin-bottom: 36px;
+  }
+  .vh-meta {
+    display: flex; flex-wrap: wrap; gap: 8px 28px;
+    font-family: var(--vh-font-mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--vh-text-200);
+  }
+  .vh-meta span strong { color: var(--vh-voltage); font-weight: 500; }
+
+  /* Glowing orb in cover */
+  .vh-orb {
+    position: absolute; top: 40px; right: -40px; width: 340px; height: 340px;
+    pointer-events: none;
+    background: radial-gradient(circle at 40% 40%, var(--vh-voltage) 0%, var(--vh-voltage-deep) 30%, transparent 65%);
+    filter: blur(30px); opacity: 0.55;
+    animation: vhPulse 6s ease-in-out infinite;
+  }
+  @keyframes vhPulse {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50%      { opacity: 0.8;  transform: scale(1.05); }
+  }
+  @media (max-width: 900px) { .vh-orb { display: none; } }
+
+  /* =========================================================
+     SECTION FRAME
+     ========================================================= */
+  .vh-section { padding: 96px 0 24px; position: relative; }
+  .vh-section-label {
+    font-family: var(--vh-font-mono); font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--vh-text-200); margin-bottom: 16px;
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .vh-section-label::before {
+    content: counter(sect, decimal-leading-zero);
+    color: var(--vh-voltage); font-weight: 600;
+  }
+  .vh-section { counter-increment: sect; }
+  .vh-shell { counter-reset: sect; }
+  .vh-section-title {
+    font-family: var(--vh-font-display);
+    font-weight: 300; font-size: clamp(36px, 5vw, 56px);
+    line-height: 1; letter-spacing: -0.025em; margin-bottom: 12px;
+  }
+  .vh-section-title em { font-style: italic; font-weight: 500; color: var(--vh-voltage); }
+  .vh-section-intro {
+    font-size: 17px; color: var(--vh-text-100); max-width: 680px; margin-bottom: 40px;
+  }
+
+  /* =========================================================
+     1. PHILOSOPHY PILLARS
+     ========================================================= */
+  .vh-pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 900px) { .vh-pillars { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .vh-pillars { grid-template-columns: 1fr; } }
+  .vh-pillar {
+    background: var(--vh-surface-100);
+    border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-lg);
+    padding: 24px 22px; position: relative; overflow: hidden;
+    transition: border-color var(--vh-base) var(--vh-ease), transform var(--vh-base) var(--vh-ease);
+  }
+  .vh-pillar:hover { border-color: var(--vh-voltage); transform: translateY(-3px); }
+  .vh-pillar::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--vh-voltage), transparent);
+    opacity: 0; transition: opacity var(--vh-base);
+  }
+  .vh-pillar:hover::before { opacity: 1; }
+  .vh-pillar-num {
+    font-family: var(--vh-font-mono); font-size: 11px; color: var(--vh-voltage);
+    letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 16px;
+  }
+  .vh-pillar-title {
+    font-family: var(--vh-font-display); font-weight: 500; font-size: 24px;
+    line-height: 1.1; margin-bottom: 10px; letter-spacing: -0.015em;
+  }
+  .vh-pillar-desc { font-size: 14px; color: var(--vh-text-200); line-height: 1.55; }
+
+  /* =========================================================
+     2. COLOR
+     ========================================================= */
+  .vh-color-lead {
+    display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; margin-bottom: 16px;
+  }
+  @media (max-width: 900px) { .vh-color-lead { grid-template-columns: 1fr; } }
+
+  .vh-swatch-hero {
+    position: relative; border-radius: var(--vh-r-xl);
+    padding: 48px 36px; min-height: 340px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    overflow: hidden; border: 1px solid var(--vh-line);
+  }
+  .vh-swatch-hero.voltage {
+    background:
+      radial-gradient(circle at 30% 30%, var(--vh-voltage-hot), var(--vh-voltage-deep) 60%, var(--vh-void) 130%);
+  }
+  .vh-swatch-hero.voltage::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 70% 80%, rgba(123, 255, 171, 0.25), transparent 50%);
+    pointer-events: none;
+  }
+  .vh-swatch-hero.bio {
+    background:
+      radial-gradient(circle at 30% 30%, var(--vh-bio), var(--vh-bio-deep) 60%, #0B2417 130%);
+  }
+  .vh-swatch-hero .vh-swatch-name {
+    position: relative; z-index: 1;
+    font-family: var(--vh-font-display); font-weight: 300;
+    font-size: 56px; line-height: 0.95; letter-spacing: -0.025em;
+    color: var(--vh-text-000);
+  }
+  .vh-swatch-hero .vh-swatch-name em { font-style: italic; font-weight: 500; }
+  .vh-swatch-hero .vh-swatch-data {
+    position: relative; z-index: 1;
+    font-family: var(--vh-font-mono); font-size: 13px; color: rgba(255,255,255,0.85);
+    display: grid; gap: 4px;
+  }
+  .vh-swatch-hero .vh-swatch-data strong {
+    font-weight: 500; color: rgba(255,255,255,0.55); margin-right: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; font-size: 10px;
+  }
+
+  .vh-swatch-hero.bio .vh-swatch-name,
+  .vh-swatch-hero.bio .vh-swatch-data { color: #041A0E; }
+  .vh-swatch-hero.bio .vh-swatch-data strong { color: rgba(4, 26, 14, 0.55); }
+
+  .vh-palette-strip { display: grid; gap: 10px; }
+  .vh-tone {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; border-radius: var(--vh-r-md);
+    border: 1px solid var(--vh-line); background: var(--vh-surface-100);
+  }
+  .vh-tone-chip { width: 36px; height: 36px; border-radius: var(--vh-r-xs); flex-shrink: 0; border: 1px solid rgba(255,255,255,0.05); }
+  .vh-tone-info { flex: 1; min-width: 0; }
+  .vh-tone-name {
+    font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--vh-text-200); margin-bottom: 3px;
+  }
+  .vh-tone-hex {
+    font-family: var(--vh-font-mono); font-size: 13px; color: var(--vh-text-000);
+    font-weight: 500;
+  }
+  .vh-tone-role { font-size: 12px; color: var(--vh-text-200); text-align: right; }
+
+  /* Neutral ramp */
+  .vh-ramp { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; margin-top: 20px; border-radius: var(--vh-r-md); overflow: hidden; }
+  .vh-ramp-cell {
+    padding: 20px 14px; font-family: var(--vh-font-mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .vh-ramp-cell span { display: block; font-size: 9px; opacity: 0.6; margin-top: 4px; }
+  @media (max-width: 700px) { .vh-ramp { grid-template-columns: repeat(4, 1fr); } }
+
+  /* =========================================================
+     3. TYPOGRAPHY
+     ========================================================= */
+  .vh-type-block {
+    background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-lg); padding: 32px; margin-bottom: 14px;
+    position: relative; overflow: hidden;
+  }
+  .vh-type-label {
+    font-family: var(--vh-font-mono); font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--vh-text-200); margin-bottom: 20px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+  .vh-type-label b { color: var(--vh-voltage); font-weight: 500; }
+
+  .vh-display-xl { font-family: var(--vh-font-display); font-weight: 300; font-size: clamp(48px, 8vw, 96px); line-height: 0.92; letter-spacing: -0.035em; }
+  .vh-display-xl em { font-style: italic; font-weight: 500; color: var(--vh-voltage); }
+  .vh-display-lg { font-family: var(--vh-font-display); font-weight: 300; font-size: 56px; line-height: 1; letter-spacing: -0.025em; }
+  .vh-display-md { font-family: var(--vh-font-display); font-weight: 500; font-size: 36px; line-height: 1.1; letter-spacing: -0.02em; }
+  .vh-headline    { font-family: var(--vh-font-body); font-weight: 600; font-size: 24px; line-height: 1.25; letter-spacing: -0.015em; }
+  .vh-body-lg     { font-family: var(--vh-font-body); font-weight: 400; font-size: 18px; line-height: 1.55; color: var(--vh-text-100); }
+  .vh-body        { font-family: var(--vh-font-body); font-weight: 400; font-size: 15px; line-height: 1.55; color: var(--vh-text-100); }
+  .vh-caption     { font-family: var(--vh-font-body); font-weight: 400; font-size: 13px; line-height: 1.4; color: var(--vh-text-200); }
+  .vh-mono-label  { font-family: var(--vh-font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--vh-text-200); }
+  .vh-data-big    { font-family: var(--vh-font-mono); font-weight: 500; font-size: 56px; letter-spacing: -0.02em; line-height: 1; }
+  .vh-data-mid    { font-family: var(--vh-font-mono); font-weight: 500; font-size: 32px; letter-spacing: -0.01em; line-height: 1; }
+
+  /* =========================================================
+     4. COMPONENTS
+     ========================================================= */
+  .vh-comp-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+  }
+  @media (max-width: 900px) { .vh-comp-grid { grid-template-columns: 1fr; } }
+
+  .vh-comp {
+    background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-lg); padding: 24px; overflow: hidden; position: relative;
+  }
+  .vh-comp-head {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--vh-line);
+  }
+  .vh-comp-title { font-family: var(--vh-font-display); font-weight: 500; font-size: 20px; letter-spacing: -0.01em; }
+  .vh-comp-tag {
+    font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--vh-text-200);
+    padding: 4px 10px; border-radius: var(--vh-r-full); border: 1px solid var(--vh-line);
+  }
+
+  /* Buttons */
+  .vh-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px; border-radius: var(--vh-r-full);
+    font-family: var(--vh-font-body); font-weight: 500; font-size: 14px;
+    letter-spacing: -0.005em; border: none; cursor: pointer;
+    transition: all var(--vh-fast) var(--vh-ease);
+  }
+  .vh-btn-primary {
+    background: var(--vh-voltage); color: #0A0F14;
+    box-shadow: var(--vh-elev-glow);
+  }
+  .vh-btn-primary:hover {
+    background: var(--vh-voltage-hot); transform: translateY(-2px);
+    box-shadow: 0 0 0 1px var(--vh-voltage-hot), 0 25px 60px -15px var(--vh-voltage-glow);
+  }
+  .vh-btn-ghost {
+    background: transparent; color: var(--vh-text-000);
+    border: 1px solid var(--vh-line-hot);
+  }
+  .vh-btn-ghost:hover { background: var(--vh-surface-200); border-color: var(--vh-voltage); color: var(--vh-voltage-hot); }
+  .vh-btn-bio {
+    background: var(--vh-bio); color: #041A0E;
+  }
+  .vh-btn-bio:hover { background: var(--vh-bio-deep); }
+  .vh-btn-arrow { transition: transform var(--vh-fast) var(--vh-ease); }
+  .vh-btn:hover .vh-btn-arrow { transform: translateX(3px); }
+
+  .vh-btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  /* Pill (choice) */
+  .vh-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: var(--vh-r-full);
+    background: var(--vh-surface-200); border: 1px solid var(--vh-line);
+    font-size: 13px; cursor: pointer;
+    transition: all var(--vh-fast) var(--vh-ease);
+  }
+  .vh-pill:hover { border-color: var(--vh-voltage); transform: translateY(-2px); }
+  .vh-pill.active {
+    background: linear-gradient(105deg, var(--vh-voltage), var(--vh-voltage-deep));
+    border-color: var(--vh-voltage-hot); color: #0A0F14; font-weight: 500;
+    box-shadow: 0 8px 28px -8px var(--vh-voltage-glow);
+  }
+  .vh-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--vh-bio); box-shadow: 0 0 8px var(--vh-bio-glow); }
+  .vh-pill.active .vh-pill-dot { background: #0A0F14; box-shadow: none; }
+
+  /* Input field */
+  .vh-field {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--vh-surface-200); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-md); padding: 14px 18px;
+    transition: border-color var(--vh-fast), box-shadow var(--vh-fast);
+  }
+  .vh-field:focus-within {
+    border-color: var(--vh-voltage);
+    box-shadow: 0 0 0 4px var(--vh-voltage-glow);
+  }
+  .vh-field-icon {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--vh-voltage); box-shadow: 0 0 10px var(--vh-voltage-glow);
+    flex-shrink: 0;
+  }
+  .vh-field-input {
+    background: transparent; border: none; outline: none;
+    color: var(--vh-text-000); font-family: var(--vh-font-body); font-size: 15px;
+    flex: 1; min-width: 0;
+  }
+  .vh-field-input::placeholder { color: var(--vh-text-300); }
+  .vh-field-hint { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--vh-text-300); }
+
+  /* Metric card */
+  .vh-metric {
+    background: var(--vh-surface-200); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-md); padding: 18px; position: relative; overflow: hidden;
+  }
+  .vh-metric::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: linear-gradient(180deg, var(--vh-voltage), var(--vh-voltage-deep));
+  }
+  .vh-metric-label { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--vh-text-200); margin-bottom: 8px; }
+  .vh-metric-value { font-family: var(--vh-font-mono); font-weight: 500; font-size: 28px; color: var(--vh-text-000); letter-spacing: -0.01em; }
+  .vh-metric-value .unit { font-size: 14px; color: var(--vh-text-200); margin-left: 6px; font-weight: 400; }
+  .vh-metric-delta { margin-top: 6px; font-size: 12px; color: var(--vh-bio); display: flex; align-items: center; gap: 4px; }
+
+  /* AI message bubble */
+  .vh-ai-msg {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px; border-radius: var(--vh-r-lg);
+    background: linear-gradient(135deg, rgba(255,107,53,0.08), rgba(88,200,255,0.04));
+    border: 1px solid var(--vh-line);
+  }
+  .vh-ai-avatar {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    background: conic-gradient(from 180deg at 50% 50%, var(--vh-voltage), var(--vh-bio), var(--vh-horizon), var(--vh-voltage));
+    padding: 2px; position: relative;
+    animation: vhSpin 8s linear infinite;
+  }
+  .vh-ai-avatar::after {
+    content: ''; position: absolute; inset: 2px; border-radius: 50%;
+    background: var(--vh-surface-100);
+  }
+  .vh-ai-avatar::before {
+    content: 'P'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: var(--vh-font-display); font-weight: 500; font-size: 14px;
+    color: var(--vh-text-000); z-index: 1;
+  }
+  @keyframes vhSpin { to { transform: rotate(360deg); } }
+  .vh-ai-content .vh-ai-name { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--vh-voltage); margin-bottom: 4px; }
+  .vh-ai-content p { font-size: 14px; color: var(--vh-text-100); line-height: 1.55; }
+
+  /* Card preview (choice tile) */
+  .vh-tile {
+    border-radius: var(--vh-r-md); overflow: hidden;
+    background: var(--vh-surface-200); border: 1px solid var(--vh-line);
+    cursor: pointer; transition: all var(--vh-base) var(--vh-ease);
+    position: relative;
+  }
+  .vh-tile.active { border-color: var(--vh-voltage); box-shadow: var(--vh-elev-glow); }
+  .vh-tile-visual {
+    height: 100px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(circle at 70% 30%, rgba(255,107,53,0.22), transparent 55%),
+      radial-gradient(circle at 20% 80%, rgba(88,200,255,0.14), transparent 55%),
+      var(--vh-surface-300);
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 10px 14px;
+  }
+  .vh-tile.active .vh-tile-visual {
+    background:
+      radial-gradient(circle at 70% 30%, var(--vh-voltage), var(--vh-voltage-deep) 70%);
+  }
+  .vh-tile-idx { font-family: var(--vh-font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--vh-text-200); }
+  .vh-tile.active .vh-tile-idx { color: rgba(10,15,20,0.7); }
+  .vh-tile-sym {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+  }
+  .vh-tile.active .vh-tile-sym { background: rgba(10,15,20,0.2); border-color: rgba(10,15,20,0.3); }
+  .vh-tile-text { padding: 14px 14px 16px; }
+  .vh-tile-title { font-family: var(--vh-font-display); font-weight: 500; font-size: 16px; margin-bottom: 2px; letter-spacing: -0.01em; }
+  .vh-tile-desc { font-size: 12px; color: var(--vh-text-200); }
+
+  /* =========================================================
+     5. MOTION
+     ========================================================= */
+  .vh-motion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 900px) { .vh-motion-grid { grid-template-columns: 1fr; } }
+  .vh-motion-card {
+    background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-lg); padding: 24px; position: relative;
+  }
+  .vh-motion-name {
+    font-family: var(--vh-font-mono); font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--vh-voltage); margin-bottom: 10px;
+  }
+  .vh-motion-title { font-family: var(--vh-font-display); font-weight: 500; font-size: 22px; margin-bottom: 8px; letter-spacing: -0.015em; }
+  .vh-motion-desc { font-size: 13px; color: var(--vh-text-200); margin-bottom: 18px; line-height: 1.5; }
+  .vh-motion-stage {
+    height: 120px; background: var(--vh-surface-200); border-radius: var(--vh-r-sm);
+    border: 1px solid var(--vh-line); display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+
+  .vh-stage-pulse { width: 24px; height: 24px; border-radius: 50%; background: var(--vh-voltage); animation: stagePulse 1.8s var(--vh-ease-out) infinite; }
+  @keyframes stagePulse {
+    0% { box-shadow: 0 0 0 0 var(--vh-voltage-glow); transform: scale(1); }
+    70% { box-shadow: 0 0 0 30px rgba(255,107,53,0); transform: scale(1.1); }
+    100% { box-shadow: 0 0 0 0 rgba(255,107,53,0); transform: scale(1); }
+  }
+  .vh-stage-counter {
+    font-family: var(--vh-font-mono); font-weight: 500; font-size: 48px;
+    background: linear-gradient(180deg, var(--vh-voltage-hot), var(--vh-voltage-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: stageCounter 3s infinite ease-in-out;
+  }
+  @keyframes stageCounter {
+    0%   { content: '0'; }
+    100% { content: '100'; }
+  }
+  .vh-stage-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+  .vh-stage-bars div {
+    width: 10px; background: linear-gradient(180deg, var(--vh-voltage), var(--vh-voltage-deep));
+    border-radius: 2px; animation: stageBar 2s ease-in-out infinite;
+  }
+  .vh-stage-bars div:nth-child(1) { animation-delay: 0s;   height: 20%; }
+  .vh-stage-bars div:nth-child(2) { animation-delay: 0.1s; height: 50%; }
+  .vh-stage-bars div:nth-child(3) { animation-delay: 0.2s; height: 80%; }
+  .vh-stage-bars div:nth-child(4) { animation-delay: 0.3s; height: 60%; }
+  .vh-stage-bars div:nth-child(5) { animation-delay: 0.4s; height: 90%; }
+  @keyframes stageBar {
+    0%, 100% { transform: scaleY(0.6); }
+    50%      { transform: scaleY(1);   }
+  }
+
+  /* Curve / token table */
+  .vh-tokens {
+    margin-top: 16px; background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-lg); overflow: hidden;
+  }
+  .vh-tokens-row {
+    display: grid; grid-template-columns: 1.2fr 1.4fr 1fr 1fr;
+    padding: 14px 18px; border-bottom: 1px solid var(--vh-line);
+    font-size: 13px; align-items: center;
+  }
+  .vh-tokens-row:last-child { border-bottom: none; }
+  .vh-tokens-row.head {
+    background: var(--vh-surface-200);
+    font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--vh-text-200);
+  }
+  .vh-tokens-row code {
+    font-family: var(--vh-font-mono); font-size: 12px;
+    color: var(--vh-voltage-hot);
+  }
+  @media (max-width: 700px) {
+    .vh-tokens-row { grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+    .vh-tokens-row > *:nth-child(n+3) { display: none; }
+  }
+
+  /* =========================================================
+     6. LIVE DEMO TILE
+     ========================================================= */
+  .vh-demo {
+    margin-top: 16px; background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-xl); padding: 32px; position: relative; overflow: hidden;
+  }
+  .vh-demo::before {
+    content: ''; position: absolute; top: -50%; right: -20%; width: 500px; height: 500px;
+    background: radial-gradient(circle, var(--vh-voltage-glow), transparent 60%);
+    pointer-events: none;
+  }
+  .vh-demo-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    position: relative; z-index: 1;
+  }
+  @media (max-width: 900px) { .vh-demo-grid { grid-template-columns: 1fr; } }
+
+  /* =========================================================
+     7. DO / DON'T
+     ========================================================= */
+  .vh-guide {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px;
+  }
+  @media (max-width: 700px) { .vh-guide { grid-template-columns: 1fr; } }
+  .vh-guide-card {
+    background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-lg); padding: 24px; position: relative;
+  }
+  .vh-guide-card.do    { border-left: 3px solid var(--vh-bio); }
+  .vh-guide-card.dont  { border-left: 3px solid var(--vh-danger); }
+  .vh-guide-tag {
+    display: inline-block; font-family: var(--vh-font-mono); font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: var(--vh-r-full); margin-bottom: 14px;
+  }
+  .vh-guide-card.do .vh-guide-tag    { background: rgba(123, 255, 171, 0.1); color: var(--vh-bio); }
+  .vh-guide-card.dont .vh-guide-tag  { background: rgba(255, 84, 112, 0.1); color: var(--vh-danger); }
+  .vh-guide-card ul { list-style: none; display: grid; gap: 10px; font-size: 14px; color: var(--vh-text-100); }
+  .vh-guide-card li { position: relative; padding-left: 20px; line-height: 1.5; }
+  .vh-guide-card li::before {
+    content: '→'; position: absolute; left: 0; color: var(--vh-text-300);
+  }
+  .vh-guide-card.do li::before   { content: '✓'; color: var(--vh-bio); }
+  .vh-guide-card.dont li::before { content: '✕'; color: var(--vh-danger); }
+
+  /* Footer */
+  .vh-foot {
+    margin-top: 96px; padding-top: 32px; border-top: 1px solid var(--vh-line);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--vh-text-300);
+  }
+</style>
+</head>
+<body>
+
+<main class="vh-shell">
+
+  <!-- ============== COVER ============== -->
+  <header class="vh-cover">
+    <div class="vh-orb"></div>
+    <div class="vh-eyebrow">Pricing AI · Design System v0.1</div>
+    <h1 class="vh-h1">Volt <em>Horizon</em>.</h1>
+    <p class="vh-lede">A design language for AI-guided renewable energy decisions — engineered to feel like the first moment a city comes online.</p>
+    <div class="vh-meta">
+      <span><strong>TONE</strong> FUTURIST · GROUNDED</span>
+      <span><strong>MODE</strong> DARK-FIRST</span>
+      <span><strong>USE</strong> PRICING AI</span>
+      <span><strong>DATE</strong> APR 2026</span>
+    </div>
+  </header>
+
+  <!-- ============== 01 PHILOSOPHY ============== -->
+  <section class="vh-section">
+    <div class="vh-section-label">Philosophy</div>
+    <h2 class="vh-section-title">Four pillars, <em>one atmosphere</em>.</h2>
+    <p class="vh-section-intro">Every design choice in Volt Horizon answers to these four principles. If a component does not serve all four, it does not ship.</p>
+
+    <div class="vh-pillars">
+      <div class="vh-pillar">
+        <div class="vh-pillar-num">P · 01</div>
+        <div class="vh-pillar-title">Pre-dawn, not midnight.</div>
+        <div class="vh-pillar-desc">Dark, but never dead. Our base surface carries a hint of teal — the sky just before the sun shows up. Warm enough to sit with for 20 minutes.</div>
+      </div>
+      <div class="vh-pillar">
+        <div class="vh-pillar-num">P · 02</div>
+        <div class="vh-pillar-title">One volt, not many.</div>
+        <div class="vh-pillar-desc">A single hot accent does all the heavy lifting. No purple gradients. No rainbow charts. Restraint is the luxury.</div>
+      </div>
+      <div class="vh-pillar">
+        <div class="vh-pillar-num">P · 03</div>
+        <div class="vh-pillar-title">Data as texture.</div>
+        <div class="vh-pillar-desc">Numbers are not decoration. Monospace digits, glowing metric bars, live-assembling BOQ lines — the math is the hero.</div>
+      </div>
+      <div class="vh-pillar">
+        <div class="vh-pillar-num">P · 04</div>
+        <div class="vh-pillar-title">AI has a body.</div>
+        <div class="vh-pillar-desc">Pria is never a faceless chat box. Her presence is a slow-rotating chromatic avatar and a warm gradient that follows her words.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== 02 COLOR ============== -->
+  <section class="vh-section">
+    <div class="vh-section-label">Color</div>
+    <h2 class="vh-section-title">The <em>voltage</em> and the bio.</h2>
+    <p class="vh-section-intro">Two hot colors, one cold, one deep base, one neutral ramp. That's the entire system. Everything else is variation.</p>
+
+    <div class="vh-color-lead">
+      <div class="vh-swatch-hero voltage">
+        <div>
+          <div class="vh-mono-label" style="color:rgba(255,255,255,0.65); margin-bottom:8px;">PRIMARY · VOLTAGE</div>
+          <div class="vh-swatch-name">First <em>voltage</em></div>
+        </div>
+        <div class="vh-swatch-data">
+          <div><strong>HEX</strong> #FF6B35</div>
+          <div><strong>USE</strong> CTAs · HIGHLIGHTS · LIVE STATES</div>
+          <div><strong>RULE</strong> NEVER MORE THAN 10% OF A SCREEN</div>
+        </div>
+      </div>
+      <div class="vh-palette-strip">
+        <div class="vh-tone">
+          <div class="vh-tone-chip" style="background:#FF8A5C;"></div>
+          <div class="vh-tone-info">
+            <div class="vh-tone-name">VOLTAGE · HOT</div>
+            <div class="vh-tone-hex">#FF8A5C</div>
+          </div>
+          <div class="vh-tone-role">Hover · Glow</div>
+        </div>
+        <div class="vh-tone">
+          <div class="vh-tone-chip" style="background:#FF6B35;"></div>
+          <div class="vh-tone-info">
+            <div class="vh-tone-name">VOLTAGE · BASE</div>
+            <div class="vh-tone-hex">#FF6B35</div>
+          </div>
+          <div class="vh-tone-role">Primary CTA</div>
+        </div>
+        <div class="vh-tone">
+          <div class="vh-tone-chip" style="background:#D94E1F;"></div>
+          <div class="vh-tone-info">
+            <div class="vh-tone-name">VOLTAGE · DEEP</div>
+            <div class="vh-tone-hex">#D94E1F</div>
+          </div>
+          <div class="vh-tone-role">Pressed · Borders</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vh-color-lead">
+      <div class="vh-swatch-hero bio">
+        <div>
+          <div class="vh-mono-label" style="color:rgba(4,26,14,0.65); margin-bottom:8px;">SECONDARY · BIO</div>
+          <div class="vh-swatch-name">Photo<em>synthesis</em></div>
+        </div>
+        <div class="vh-swatch-data">
+          <div><strong>HEX</strong> #7BFFAB</div>
+          <div><strong>USE</strong> LIVE DATA · "ENERGY PRODUCING"</div>
+          <div><strong>RULE</strong> SUCCESS STATES · NEVER PRIMARY CTA</div>
+        </div>
+      </div>
+      <div class="vh-palette-strip">
+        <div class="vh-tone">
+          <div class="vh-tone-chip" style="background:#7BFFAB;"></div>
+          <div class="vh-tone-info">
+            <div class="vh-tone-name">BIO · BASE</div>
+            <div class="vh-tone-hex">#7BFFAB</div>
+          </div>
+          <div class="vh-tone-role">Alive signal</div>
+        </div>
+        <div class="vh-tone">
+          <div class="vh-tone-chip" style="background:#3EDB7A;"></div>
+          <div class="vh-tone-info">
+            <div class="vh-tone-name">BIO · DEEP</div>
+            <div class="vh-tone-hex">#3EDB7A</div>
+          </div>
+          <div class="vh-tone-role">Success · Confirm</div>
+        </div>
+        <div class="vh-tone">
+          <div class="vh-tone-chip" style="background:#58C8FF;"></div>
+          <div class="vh-tone-info">
+            <div class="vh-tone-name">HORIZON · INFO</div>
+            <div class="vh-tone-hex">#58C8FF</div>
+          </div>
+          <div class="vh-tone-role">Tertiary · Data labels</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vh-ramp">
+      <div class="vh-ramp-cell" style="background:#05080C; color:#5A6B7F;">VOID<span>#05080C</span></div>
+      <div class="vh-ramp-cell" style="background:#0A0F14; color:#5A6B7F;">000<span>#0A0F14</span></div>
+      <div class="vh-ramp-cell" style="background:#0F1620; color:#8A9AAD;">100<span>#0F1620</span></div>
+      <div class="vh-ramp-cell" style="background:#17202B; color:#8A9AAD;">200<span>#17202B</span></div>
+      <div class="vh-ramp-cell" style="background:#1F2B38; color:#C8D4E0;">300<span>#1F2B38</span></div>
+      <div class="vh-ramp-cell" style="background:#5A6B7F; color:#F4F8FB;">T300<span>#5A6B7F</span></div>
+      <div class="vh-ramp-cell" style="background:#C8D4E0; color:#0A0F14;">T100<span>#C8D4E0</span></div>
+      <div class="vh-ramp-cell" style="background:#F4F8FB; color:#0A0F14;">T000<span>#F4F8FB</span></div>
+    </div>
+  </section>
+
+  <!-- ============== 03 TYPOGRAPHY ============== -->
+  <section class="vh-section">
+    <div class="vh-section-label">Typography</div>
+    <h2 class="vh-section-title">A <em>voice</em> with three accents.</h2>
+    <p class="vh-section-intro">Fraunces for soul, Inter Tight for clarity, JetBrains Mono for truth. Every number the user sees is in mono — this is a non-negotiable trust signal.</p>
+
+    <div class="vh-type-block">
+      <div class="vh-type-label"><span>DISPLAY / XL — hero</span><span><b>Fraunces</b> · 96–128 / 300 + italic 500 / -3.5%</span></div>
+      <div class="vh-display-xl">Your energy <em>future</em>.</div>
+    </div>
+
+    <div class="vh-type-block">
+      <div class="vh-type-label"><span>DISPLAY / LG — section</span><span><b>Fraunces</b> · 56 / 300 / -2.5%</span></div>
+      <div class="vh-display-lg">One volt, not many.</div>
+    </div>
+
+    <div class="vh-type-block">
+      <div class="vh-type-label"><span>DISPLAY / MD — card title</span><span><b>Fraunces</b> · 36 / 500 / -2%</span></div>
+      <div class="vh-display-md">Hybrid solar + battery</div>
+    </div>
+
+    <div class="vh-type-block">
+      <div class="vh-type-label"><span>HEADLINE — UI</span><span><b>Inter Tight</b> · 24 / 600</span></div>
+      <div class="vh-headline">What needs to stay on?</div>
+    </div>
+
+    <div class="vh-type-block">
+      <div class="vh-type-label"><span>BODY / LG · BODY · CAPTION</span><span><b>Inter Tight</b> · 18 / 15 / 13 / 400</span></div>
+      <div class="vh-body-lg" style="margin-bottom:10px;">Pria sized this plan for your 6 kWh/day load in Lekki, with two days of lithium autonomy.</div>
+      <div class="vh-body" style="margin-bottom:10px;">Every line item is traced to a source. FX-linked components are re-priced every time you open this plan — we note the rate used at the top.</div>
+      <div class="vh-caption">Tap any number to see the math.</div>
+    </div>
+
+    <div class="vh-type-block">
+      <div class="vh-type-label"><span>MONO / LABEL</span><span><b>JetBrains Mono</b> · 11 / 500 / +18%</span></div>
+      <div class="vh-mono-label">— LIVE PLAN · ASSEMBLING</div>
+    </div>
+
+    <div class="vh-type-block">
+      <div class="vh-type-label"><span>DATA / BIG — hero numbers</span><span><b>JetBrains Mono</b> · 56 / 500 / -2%</span></div>
+      <div class="vh-data-big" style="background: linear-gradient(180deg, var(--vh-voltage-hot), var(--vh-voltage-deep)); -webkit-background-clip: text; background-clip: text; color: transparent;">₦4,280,000</div>
+      <div class="vh-mono-label" style="margin-top:10px;">TOTAL ESTIMATED · ±15% CONFIDENCE</div>
+    </div>
+  </section>
+
+  <!-- ============== 04 COMPONENTS ============== -->
+  <section class="vh-section">
+    <div class="vh-section-label">Components</div>
+    <h2 class="vh-section-title">The <em>working</em> kit.</h2>
+    <p class="vh-section-intro">Ten primitives. Everything Pricing AI ships — the onboarding cards, the live plan panel, the reveal page, the installer dashboard — is a composition of these.</p>
+
+    <div class="vh-comp-grid">
+      <!-- Buttons -->
+      <div class="vh-comp">
+        <div class="vh-comp-head">
+          <div class="vh-comp-title">Buttons</div>
+          <div class="vh-comp-tag">Primitive · 01</div>
+        </div>
+        <div class="vh-btn-row">
+          <button class="vh-btn vh-btn-primary">Begin your plan <span class="vh-btn-arrow">→</span></button>
+          <button class="vh-btn vh-btn-ghost">See variants</button>
+          <button class="vh-btn vh-btn-bio">Plan is live <span class="vh-btn-arrow">→</span></button>
+        </div>
+        <div style="margin-top:18px;" class="vh-caption">
+          Primary = voltage. Bio = completion / live system. Ghost = secondary.
+        </div>
+      </div>
+
+      <!-- Input field -->
+      <div class="vh-comp">
+        <div class="vh-comp-head">
+          <div class="vh-comp-title">Input · Field</div>
+          <div class="vh-comp-tag">Primitive · 02</div>
+        </div>
+        <div class="vh-field">
+          <div class="vh-field-icon"></div>
+          <input class="vh-field-input" type="text" value="Lekki Phase 1, Lagos" />
+          <div class="vh-field-hint">GPS · OPTIONAL</div>
+        </div>
+        <div style="margin-top:18px;" class="vh-caption">
+          Glowing icon pulses when empty. Focus ring is a 4px voltage-glow halo.
+        </div>
+      </div>
+
+      <!-- Choice pills -->
+      <div class="vh-comp">
+        <div class="vh-comp-head">
+          <div class="vh-comp-title">Pills · Choice</div>
+          <div class="vh-comp-tag">Primitive · 03</div>
+        </div>
+        <div class="vh-btn-row">
+          <div class="vh-pill active">Solar</div>
+          <div class="vh-pill"><span class="vh-pill-dot"></span>Wind</div>
+          <div class="vh-pill"><span class="vh-pill-dot"></span>Hybrid</div>
+          <div class="vh-pill"><span class="vh-pill-dot"></span>Biomass</div>
+          <div class="vh-pill"><span class="vh-pill-dot"></span>Help me choose</div>
+        </div>
+        <div style="margin-top:18px;" class="vh-caption">
+          Inactive pills carry a bio-green pulse dot. Active fills with voltage gradient.
+        </div>
+      </div>
+
+      <!-- Metric -->
+      <div class="vh-comp">
+        <div class="vh-comp-head">
+          <div class="vh-comp-title">Metric · Card</div>
+          <div class="vh-comp-tag">Primitive · 04</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+          <div class="vh-metric">
+            <div class="vh-metric-label">SYSTEM SIZE</div>
+            <div class="vh-metric-value">5<span class="unit">kW</span></div>
+            <div class="vh-metric-delta">+1 kW from last draft</div>
+          </div>
+          <div class="vh-metric">
+            <div class="vh-metric-label">DAILY USE</div>
+            <div class="vh-metric-value">6.2<span class="unit">kWh/d</span></div>
+            <div class="vh-metric-delta">5 appliances</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Choice tile -->
+      <div class="vh-comp">
+        <div class="vh-comp-head">
+          <div class="vh-comp-title">Tile · Choice</div>
+          <div class="vh-comp-tag">Primitive · 05</div>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+          <div class="vh-tile active">
+            <div class="vh-tile-visual">
+              <div class="vh-tile-idx">OPT · 01</div>
+              <div class="vh-tile-sym"></div>
+            </div>
+            <div class="vh-tile-text">
+              <div class="vh-tile-title">A home</div>
+              <div class="vh-tile-desc">House, flat, compound.</div>
+            </div>
+          </div>
+          <div class="vh-tile">
+            <div class="vh-tile-visual">
+              <div class="vh-tile-idx">OPT · 02</div>
+              <div class="vh-tile-sym"></div>
+            </div>
+            <div class="vh-tile-text">
+              <div class="vh-tile-title">A business</div>
+              <div class="vh-tile-desc">Shop, office, clinic.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI msg -->
+      <div class="vh-comp">
+        <div class="vh-comp-head">
+          <div class="vh-comp-title">AI · Message</div>
+          <div class="vh-comp-tag">Primitive · 06</div>
+        </div>
+        <div class="vh-ai-msg">
+          <div class="vh-ai-avatar"></div>
+          <div class="vh-ai-content">
+            <div class="vh-ai-name">PRIA</div>
+            <p>Based on your generator spend and Lekki irradiance, a 5 kW hybrid pays back in about 26 months. Want me to try it with a smaller battery?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== 05 MOTION ============== -->
+  <section class="vh-section">
+    <div class="vh-section-label">Motion</div>
+    <h2 class="vh-section-title">Motion tells the <em>truth</em>.</h2>
+    <p class="vh-section-intro">Three signature motions carry the product. Every other animation is a variation of these. Keep it restrained — in Volt Horizon, the reward for waiting is one beautiful moment, not fifteen jittery ones.</p>
+
+    <div class="vh-motion-grid">
+      <div class="vh-motion-card">
+        <div class="vh-motion-name">M · 01 · PULSE</div>
+        <div class="vh-motion-title">The heartbeat.</div>
+        <div class="vh-motion-desc">A soft voltage ring expanding out from any "live" element — Pria's avatar, the total-cost number, the active step marker. Slow (1.8s), rare, not on every hover.</div>
+        <div class="vh-motion-stage"><div class="vh-stage-pulse"></div></div>
+      </div>
+      <div class="vh-motion-card">
+        <div class="vh-motion-name">M · 02 · ASSEMBLE</div>
+        <div class="vh-motion-title">Numbers ticking in.</div>
+        <div class="vh-motion-desc">BOQ lines and metric values ease up with a staggered counter, cubic-out. Used whenever the plan recomputes — the feeling of work being done in real time.</div>
+        <div class="vh-motion-stage"><div class="vh-stage-bars"><div></div><div></div><div></div><div></div><div></div></div></div>
+      </div>
+      <div class="vh-motion-card">
+        <div class="vh-motion-name">M · 03 · HORIZON</div>
+        <div class="vh-motion-title">Chromatic spin.</div>
+        <div class="vh-motion-desc">Pria's avatar slowly rotates a conic gradient of all three accent hues. Always on, always subtle (8s/rev). This is her pulse — and the only place we use the full palette at once.</div>
+        <div class="vh-motion-stage">
+          <div style="width:56px; height:56px;" class="vh-ai-avatar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vh-tokens">
+      <div class="vh-tokens-row head">
+        <span>Token</span><span>Value</span><span>Use</span><span>Rule</span>
+      </div>
+      <div class="vh-tokens-row">
+        <span>Fast</span><code>180ms · cubic-bezier(.2,.7,.2,1)</code><span>Hover · Focus</span><span>Never longer than a blink.</span>
+      </div>
+      <div class="vh-tokens-row">
+        <span>Base</span><code>320ms · cubic-bezier(.2,.7,.2,1)</code><span>Step transitions</span><span>Default for most moves.</span>
+      </div>
+      <div class="vh-tokens-row">
+        <span>Slow</span><code>560ms · cubic-bezier(.16,1,.3,1)</code><span>Hero reveals</span><span>Only on first paint.</span>
+      </div>
+      <div class="vh-tokens-row">
+        <span>Stagger</span><code>80ms between children</code><span>Assembling lists</span><span>Max 8 items; cap tail.</span>
+      </div>
+      <div class="vh-tokens-row">
+        <span>Pulse</span><code>1800ms ease-out infinite</code><span>Live indicators</span><span>One per viewport.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== 06 IN-PRODUCT DEMO ============== -->
+  <section class="vh-section">
+    <div class="vh-section-label">In product</div>
+    <h2 class="vh-section-title">The <em>whole</em> language, working.</h2>
+    <p class="vh-section-intro">One composition pulling from every primitive above — how a Pricing AI onboarding step actually feels.</p>
+
+    <div class="vh-demo">
+      <div class="vh-demo-grid">
+        <div>
+          <div class="vh-mono-label" style="margin-bottom:16px;">— STEP 04 / 06 · DIRECTION</div>
+          <div class="vh-display-md" style="margin-bottom:8px;">Which <em style="color:var(--vh-voltage);">direction</em> are you exploring?</div>
+          <div class="vh-body" style="margin-bottom:22px;">Pick one — or let Pria pick the best fit for your site and load.</div>
+          <div class="vh-btn-row" style="margin-bottom:26px;">
+            <div class="vh-pill active">Solar PV</div>
+            <div class="vh-pill"><span class="vh-pill-dot"></span>Hybrid</div>
+            <div class="vh-pill"><span class="vh-pill-dot"></span>Small wind</div>
+            <div class="vh-pill"><span class="vh-pill-dot"></span>Biomass</div>
+          </div>
+          <div class="vh-ai-msg">
+            <div class="vh-ai-avatar"></div>
+            <div class="vh-ai-content">
+              <div class="vh-ai-name">PRIA</div>
+              <p>Given your 6 kWh/day and Lekki's irradiance, solar PV is the cleanest fit. Hybrid is worth a look if you want a generator for surge loads.</p>
+            </div>
+          </div>
+          <div style="margin-top:26px; display:flex; gap:10px;">
+            <button class="vh-btn vh-btn-ghost">Back</button>
+            <button class="vh-btn vh-btn-primary">Continue <span class="vh-btn-arrow">→</span></button>
+          </div>
+        </div>
+
+        <div style="background: var(--vh-surface-200); border: 1px solid var(--vh-line); border-radius: var(--vh-r-lg); padding: 24px; position: relative; overflow: hidden;">
+          <div class="vh-mono-label" style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span>— LIVE PLAN</span>
+            <span style="color: var(--vh-bio); display:flex; align-items:center; gap:6px;">
+              <span style="width:6px; height:6px; border-radius:50%; background:var(--vh-bio); box-shadow:0 0 10px var(--vh-bio-glow);"></span>
+              UPDATING
+            </span>
+          </div>
+          <div class="vh-data-big" style="background: linear-gradient(180deg, var(--vh-voltage-hot), var(--vh-voltage-deep)); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 40px; margin-bottom: 4px;">₦4,280,000</div>
+          <div class="vh-mono-label" style="margin-bottom:20px;">ESTIMATED TOTAL · INCL. VAT</div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom: 20px;">
+            <div class="vh-metric" style="padding:14px;">
+              <div class="vh-metric-label" style="font-size:9px;">SYSTEM</div>
+              <div class="vh-metric-value" style="font-size:22px;">5<span class="unit" style="font-size:11px;">kW</span></div>
+            </div>
+            <div class="vh-metric" style="padding:14px;">
+              <div class="vh-metric-label" style="font-size:9px;">DAILY</div>
+              <div class="vh-metric-value" style="font-size:22px;">6.2<span class="unit" style="font-size:11px;">kWh</span></div>
+            </div>
+            <div class="vh-metric" style="padding:14px;">
+              <div class="vh-metric-label" style="font-size:9px;">PAYBACK</div>
+              <div class="vh-metric-value" style="font-size:22px;">2.2<span class="unit" style="font-size:11px;">yrs</span></div>
+            </div>
+          </div>
+
+          <div class="vh-mono-label" style="margin-bottom: 10px;">BOQ · ASSEMBLING</div>
+          <div style="display:grid; gap:6px; font-size: 13px;">
+            <div style="display:flex; justify-content:space-between;"><span style="color:var(--vh-text-200);">5× 1 kW solar panels</span><span style="font-family:var(--vh-font-mono);">₦1,400,000</span></div>
+            <div style="display:flex; justify-content:space-between;"><span style="color:var(--vh-text-200);">5 kW hybrid inverter</span><span style="font-family:var(--vh-font-mono);">₦475,000</span></div>
+            <div style="display:flex; justify-content:space-between;"><span style="color:var(--vh-text-200);">8 kWh lithium battery</span><span style="font-family:var(--vh-font-mono);">₦2,560,000</span></div>
+            <div style="display:flex; justify-content:space-between; padding-top:6px; border-top:1px solid var(--vh-line); margin-top:4px;"><span style="color:var(--vh-text-200);">Install · BOS · VAT</span><span style="font-family:var(--vh-font-mono);">₦775,000</span></div>
+          </div>
+
+          <div style="margin-top: 20px; padding: 14px; border-radius: var(--vh-r-md); background: linear-gradient(105deg, var(--vh-voltage), var(--vh-voltage-deep)); color: #0A0F14;">
+            <div style="font-family: var(--vh-font-mono); font-size:10px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom:6px; opacity:0.7;">VS. YOUR GENERATOR</div>
+            <div style="font-size: 13px; line-height:1.5;">You spend ~₦165k/mo on petrol. This plan pays back in <strong>26 months</strong>, then runs near-free.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== 07 DO / DON'T ============== -->
+  <section class="vh-section">
+    <div class="vh-section-label">Guardrails</div>
+    <h2 class="vh-section-title">How to keep it <em>Volt Horizon</em>.</h2>
+    <p class="vh-section-intro">These rules are the difference between distinctive and generic. If a designer or engineer is tempted to break one, push back.</p>
+
+    <div class="vh-guide">
+      <div class="vh-guide-card do">
+        <span class="vh-guide-tag">DO</span>
+        <ul>
+          <li>Anchor every screen to one hot voltage element. One, not two.</li>
+          <li>Use mono for every displayed number the user will act on.</li>
+          <li>Let dark surfaces breathe — minimum 24px padding on any card.</li>
+          <li>Reserve bio-green for "the system is producing / live" states.</li>
+          <li>Give Pria her chromatic avatar whenever she speaks.</li>
+          <li>Use gradient text sparingly and only on the single hero number.</li>
+          <li>Stagger reveals in order of importance, not left-to-right order.</li>
+        </ul>
+      </div>
+      <div class="vh-guide-card dont">
+        <span class="vh-guide-tag">DON'T</span>
+        <ul>
+          <li>Use purple, cyan-gradient or neon-blue "AI" accents. Tired.</li>
+          <li>Put voltage and bio next to each other as CTAs — they fight.</li>
+          <li>Render financial data in Fraunces or Inter. Mono only.</li>
+          <li>Animate on every hover. Pulse is rare. Motion is earned.</li>
+          <li>Use pure black (#000) anywhere. Always route through void or surface-000.</li>
+          <li>Draw fake "tech" lines, nodes, circuits. The system is the tech.</li>
+          <li>Stack more than three colored glows in a single viewport.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== 08 TOKEN HANDOFF ============== -->
+  <section class="vh-section">
+    <div class="vh-section-label">Handoff</div>
+    <h2 class="vh-section-title">Tokens, ready to <em>paste</em>.</h2>
+    <p class="vh-section-intro">Drop these into Tailwind, CSS variables, or a design-system setup in Claude Design. Nothing below is decorative — every value has a job.</p>
+
+    <div class="vh-tokens">
+      <div class="vh-tokens-row head"><span>Token</span><span>Value</span><span>Type</span><span>Role</span></div>
+      <div class="vh-tokens-row"><span>--vh-surface-000</span><code>#0A0F14</code><span>color</span><span>Page bg</span></div>
+      <div class="vh-tokens-row"><span>--vh-surface-200</span><code>#17202B</code><span>color</span><span>Card</span></div>
+      <div class="vh-tokens-row"><span>--vh-voltage</span><code>#FF6B35</code><span>color</span><span>Primary accent</span></div>
+      <div class="vh-tokens-row"><span>--vh-bio</span><code>#7BFFAB</code><span>color</span><span>Live / success</span></div>
+      <div class="vh-tokens-row"><span>--vh-horizon</span><code>#58C8FF</code><span>color</span><span>Informational</span></div>
+      <div class="vh-tokens-row"><span>--vh-text-000</span><code>#F4F8FB</code><span>color</span><span>Primary text</span></div>
+      <div class="vh-tokens-row"><span>--vh-font-display</span><code>Fraunces</code><span>font</span><span>Serif display</span></div>
+      <div class="vh-tokens-row"><span>--vh-font-body</span><code>Inter Tight</code><span>font</span><span>UI / body</span></div>
+      <div class="vh-tokens-row"><span>--vh-font-mono</span><code>JetBrains Mono</code><span>font</span><span>Numbers · labels</span></div>
+      <div class="vh-tokens-row"><span>--vh-r-lg</span><code>20px</code><span>radius</span><span>Card</span></div>
+      <div class="vh-tokens-row"><span>--vh-r-full</span><code>999px</code><span>radius</span><span>Pills · CTA</span></div>
+      <div class="vh-tokens-row"><span>--vh-base</span><code>320ms · .2,.7,.2,1</code><span>motion</span><span>Default transition</span></div>
+      <div class="vh-tokens-row"><span>--vh-elev-glow</span><code>colored glow shadow</code><span>shadow</span><span>Active state</span></div>
+    </div>
+  </section>
+
+  <footer class="vh-foot">
+    <div>VOLT HORIZON · v0.1 · PRICING AI</div>
+    <div>DRAFT · APR 22 · 2026</div>
+  </footer>
+
+</main>
+
+</body>
+</html>

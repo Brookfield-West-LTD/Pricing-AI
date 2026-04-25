@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 32px; background: var(--vh-surface-000); min-height: 100vh; display: grid; gap: 20px; align-content: center; }
+  .hero {
+    display: flex; align-items: center; gap: 22px;
+    padding: 28px 32px; background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-lg); position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ''; position: absolute; right: -40px; top: -40px; width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,53,.18), transparent 60%); pointer-events: none;
+  }
+  .mark {
+    width: 64px; height: 64px; position: relative; flex-shrink: 0;
+  }
+  .mark svg { width: 100%; height: 100%; display: block; }
+  .wm {
+    font-family: var(--vh-font-display); font-weight: 300; font-size: 44px; letter-spacing: -0.035em; line-height: 1; color: var(--vh-text-000);
+  }
+  .wm em { font-style: italic; font-weight: 500; color: var(--vh-voltage); }
+  .wm .tld { font-family: var(--vh-font-mono); font-weight: 400; font-size: 14px; color: var(--vh-text-300); letter-spacing: 0.04em; margin-left: 10px; vertical-align: middle; }
+
+  .usage { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .u {
+    padding: 20px; border-radius: var(--vh-r-md); border: 1px solid var(--vh-line);
+    display: flex; align-items: center; justify-content: center; min-height: 100px;
+    font-family: var(--vh-font-display); font-weight: 300; font-size: 26px; letter-spacing: -0.03em;
+  }
+  .u em { font-style: italic; font-weight: 500; }
+  .u.dark   { background: var(--vh-surface-100); color: var(--vh-text-000); }
+  .u.dark em  { color: var(--vh-voltage); }
+  .u.light  { background: var(--vh-text-000); color: var(--vh-void); }
+  .u.light em { color: var(--vh-voltage-deep); }
+  .u.mono   { background: var(--vh-surface-100); color: var(--vh-text-000); }
+  .u.mono em { color: var(--vh-text-000); font-style: italic; }
+
+  .u small { display: block; font-family: var(--vh-font-mono); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; margin-top: 8px; opacity: .55; text-align: center; }
+  .u > div { text-align: center; }
+</style></head>
+<body class="vh-atmosphere">
+
+  <div class="hero">
+    <div class="mark">
+      <!-- Price arc + voltage slash: a quarter-arc rising into a lightning tick -->
+      <svg viewBox="0 0 64 64" fill="none">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#FF8A5C"/>
+            <stop offset="1" stop-color="#D94E1F"/>
+          </linearGradient>
+        </defs>
+        <!-- Trend / horizon arc -->
+        <path d="M6 50 Q 32 6, 58 30" stroke="url(#g)" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <!-- Voltage bolt tick -->
+        <path d="M34 22 L28 36 L36 36 L30 50" stroke="#F4F8FB" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+        <!-- Anchor dot -->
+        <circle cx="6" cy="50" r="3" fill="#7BFFAB"/>
+      </svg>
+    </div>
+    <div class="wm">Pricing<em>AI</em><span class="tld">.ng</span></div>
+  </div>
+
+  <div class="usage">
+    <div class="u dark"><div>P<em>/</em>AI<small>— DARK · DEFAULT</small></div></div>
+    <div class="u light"><div>P<em>/</em>AI<small>— LIGHT · PRINT ONLY</small></div></div>
+    <div class="u mono"><div>P<em>/</em>AI<small>— MONO · ENGRAVE · ETCH</small></div></div>
+  </div>
+
+</body></html>

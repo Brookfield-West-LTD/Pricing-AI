@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding: 24px; background: var(--vh-surface-000); min-height: 100vh; display:grid; grid-template-columns: 1.3fr 1fr; gap: 14px; align-items: stretch; }
+  .panel {
+    background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-lg); padding: 20px;
+  }
+  .label { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing:.18em; text-transform:uppercase; color: var(--vh-text-200); margin-bottom: 16px; }
+  .radii { display:flex; align-items: flex-end; gap: 14px; }
+  .r { background: var(--vh-surface-300); border: 1px solid var(--vh-line-hot); aspect-ratio: 1; flex: 1; display: flex; align-items: flex-end; justify-content: center; padding: 8px; font-family: var(--vh-font-mono); font-size: 10px; color: var(--vh-text-200); letter-spacing: .1em; }
+  .r.xs  { border-radius: 6px;  }
+  .r.sm  { border-radius: 10px; }
+  .r.md  { border-radius: 14px; }
+  .r.lg  { border-radius: 20px; }
+  .r.xl  { border-radius: 28px; }
+  .r.full{ border-radius: 999px; aspect-ratio: 2/1; align-self: flex-end; flex-basis: 100px; flex-grow: 0; }
+  .spacing { display:grid; gap: 6px; margin-top: 8px; }
+  .sp { display:flex; align-items:center; gap: 12px; font-family: var(--vh-font-mono); font-size: 11px; color: var(--vh-text-200); }
+  .sp .bar { height: 10px; background: var(--vh-voltage); border-radius: 2px; }
+  .sp code { color: var(--vh-voltage-hot); font-size: 10px; }
+</style></head>
+<body class="vh-atmosphere">
+  <div class="panel">
+    <div class="label">— RADIUS SCALE</div>
+    <div class="radii">
+      <div class="r xs">6</div>
+      <div class="r sm">10</div>
+      <div class="r md">14</div>
+      <div class="r lg">20</div>
+      <div class="r xl">28</div>
+      <div class="r full">999</div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="label">— SPACING · 8PX BASE</div>
+    <div class="spacing">
+      <div class="sp"><code>s-1</code><div class="bar" style="width: 4px;"></div><span>4</span></div>
+      <div class="sp"><code>s-2</code><div class="bar" style="width: 8px;"></div><span>8</span></div>
+      <div class="sp"><code>s-3</code><div class="bar" style="width: 12px;"></div><span>12</span></div>
+      <div class="sp"><code>s-4</code><div class="bar" style="width: 16px;"></div><span>16</span></div>
+      <div class="sp"><code>s-5</code><div class="bar" style="width: 24px;"></div><span>24</span></div>
+      <div class="sp"><code>s-6</code><div class="bar" style="width: 32px;"></div><span>32</span></div>
+      <div class="sp"><code>s-7</code><div class="bar" style="width: 48px;"></div><span>48</span></div>
+      <div class="sp"><code>s-8</code><div class="bar" style="width: 64px;"></div><span>64</span></div>
+      <div class="sp"><code>s-9</code><div class="bar" style="width: 96px;"></div><span>96</span></div>
+    </div>
+  </div>
+</body></html>

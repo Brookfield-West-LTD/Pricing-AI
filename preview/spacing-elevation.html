@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding: 32px; background: var(--vh-surface-000); min-height: 100vh; display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: center; }
+  .card {
+    background: var(--vh-surface-200); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-lg); padding: 18px; height: 120px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .card.elev-1 { box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 10px 30px -10px rgba(0,0,0,0.6); }
+  .card.elev-2 { box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 60px -20px rgba(0,0,0,0.75); }
+  .card.elev-glow {
+    border-color: var(--vh-voltage);
+    box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.35), 0 20px 60px -20px rgba(255, 107, 53, 0.45);
+  }
+  .label { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing:.18em; text-transform:uppercase; color: var(--vh-text-200); }
+  .name { font-family: var(--vh-font-display); font-weight: 500; font-size: 20px; letter-spacing: -0.015em; color: var(--vh-text-000); }
+  .meta { font-family: var(--vh-font-mono); font-size: 10px; color: var(--vh-text-300); }
+  .card.elev-glow .name { color: var(--vh-voltage-hot); }
+</style></head>
+<body class="vh-atmosphere">
+  <div class="card elev-1">
+    <div class="label">ELEV · 01</div>
+    <div><div class="name">Resting</div><div class="meta">inset hl · 30px drop</div></div>
+  </div>
+  <div class="card elev-2">
+    <div class="label">ELEV · 02</div>
+    <div><div class="name">Raised</div><div class="meta">inset hl · 60px drop</div></div>
+  </div>
+  <div class="card elev-glow">
+    <div class="label">ELEV · GLOW</div>
+    <div><div class="name">Active</div><div class="meta">voltage ring · voltage drop</div></div>
+  </div>
+</body></html>

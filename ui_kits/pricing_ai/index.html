@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Pricing AI — Onboarding · Volt Horizon</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../../colors_and_type.css"/>
+<link rel="stylesheet" href="ui_kit.css"/>
+<link rel="stylesheet" href="motion.css"/>
+<link rel="stylesheet" href="pria.css"/>
+<link rel="stylesheet" href="phase2.css"/>
+<style>
+  html, body { margin:0; padding:0; background: var(--vh-surface-000); color: var(--vh-text-000); min-height: 100vh; overflow-x: hidden; }
+  .vh-app { min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+
+  .vh-split { display: grid; grid-template-columns: 1fr 400px; flex: 1; min-height: 0; }
+  @media (max-width: 760px) { .vh-split { grid-template-columns: 1fr; } .vh-plan { border-left: none; border-top: 1px solid var(--vh-line); position: static; height: auto; max-height: none; } }
+  .vh-plan { border-left: 1px solid var(--vh-line); position: sticky; top: 0; max-height: calc(100vh - 64px); height: calc(100vh - 64px); }
+
+  /* Variant switcher */
+  .vh-variant-bar {
+    position: fixed; bottom: 20px; right: 20px;
+    background: rgba(15,22,32,0.92); backdrop-filter: blur(12px);
+    border: 1px solid var(--vh-line); border-radius: 999px;
+    padding: 6px; display: flex; gap: 4px; z-index: 50;
+    box-shadow: 0 18px 40px -12px rgba(0,0,0,0.65);
+  }
+  .vh-variant-bar button {
+    padding: 8px 14px; border-radius: 999px; border: none; cursor: pointer;
+    background: transparent; color: var(--vh-text-200);
+    font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+    transition: all 180ms cubic-bezier(.2,.7,.2,1);
+  }
+  .vh-variant-bar button[data-active="true"] {
+    background: var(--vh-voltage); color: var(--vh-void);
+  }
+  .vh-variant-bar button:not([data-active="true"]):hover { color: var(--vh-text-000); }
+
+  .vh-variant-bar .label {
+    padding: 8px 10px 8px 14px; font-family: var(--vh-font-mono); font-size: 9px; letter-spacing:.2em; text-transform:uppercase; color: var(--vh-text-300); border-right: 1px solid var(--vh-line); margin-right: 4px;
+  }
+</style>
+</head>
+<body class="vh-atmosphere">
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="shaders.jsx"></script>
+<script type="text/babel" src="pria.jsx"></script>
+<script type="text/babel" src="phase2.jsx"></script>
+<script type="text/babel" src="shell.jsx"></script>
+<script type="text/babel" src="motion.jsx"></script>
+<script type="text/babel" src="steps.jsx"></script>
+<script type="text/babel" src="plan_variants.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+function computePlan(d) {
+  const daily = d.appliances.reduce((s,a) => s + a.watts * a.hours, 0) / 1000;
+  const kw    = Math.max(1, Math.ceil(daily / 4.5));
+  const bat   = Math.ceil(daily * 1.2);
+  const total = Math.round((kw*1000*280 + bat*1000*320 + kw*95000) * 1.18);
+  const monthlyGen = (d.currentSource === 'generator' || d.currentSource === 'mix')
+    ? Math.round(d.generatorKVA * 30 * 1.3 * 1100) : 0;
+  const paybackM = monthlyGen ? Math.ceil(total / monthlyGen) : null;
+  return {
+    capex:     total,
+    savings20: monthlyGen ? monthlyGen * 12 * 20 - total : 32_540_000,
+    paybackY:  paybackM ? parseFloat((paybackM / 12).toFixed(1)) : 3.1,
+    autonomyH: Math.min(23.4, Math.round(Math.min(bat / Math.max(daily, 0.1), 24) * 10) / 10),
+    co2T:      Math.round(kw * 1.4 * 20),
+    dieselL:   Math.round(kw * 0.4 * 20 * 365),
+    kw, bat,
+  };
+}
+
+function PriaVoiceController() {
+  const [open, setOpen] = useState(false);
+  const [voiceState, setVoiceState] = useState('idle');
+  if (!window.Pria_VoiceButton) return null;
+  return (
+    <>
+      {!open && <window.Pria_VoiceButton onOpen={() => { setOpen(true); setVoiceState('listening'); }}/>}
+      {open && window.Pria_VoiceCard && (
+        <window.Pria_VoiceCard
+          state={voiceState}
+          transcript="listening…"
+          onClose={() => setOpen(false)}
+          onMute={() => setVoiceState(s => s === 'listening' ? 'idle' : 'listening')}
+          onEnd={() => { setVoiceState('idle'); setOpen(false); }}
+        />
+      )}
+    </>
+  );
+}
+
+const STEPS = [
+  { id:'hero',      label:'WELCOME'    },
+  { id:'who',       label:'WHO'        },
+  { id:'location',  label:'LOCATION'   },
+  { id:'current',   label:'TODAY'      },
+  { id:'direction', label:'DIRECTION'  },
+  { id:'loads',     label:'LOADS'      },
+  { id:'reveal',    label:'PLAN'       },
+];
+
+const PANEL_VARIANTS = [
+  { id:'receipt',   label:'Receipt'   },
+  { id:'orchestra', label:'Orchestra' },
+  { id:'telemetry', label:'Telemetry' },
+];
+const getPanelComp = (id) => ({
+  receipt:   window.VH_PlanPanel_Receipt,
+  orchestra: window.VH_PlanPanel_Orchestra,
+  telemetry: window.VH_PlanPanel_Telemetry,
+})[id] || window.VH_PlanPanel_Receipt;
+
+function App() {
+  const [step, setStep] = useState(() => {
+    const s = parseInt(localStorage.getItem('vh_step') || '0', 10);
+    return isNaN(s) ? 0 : Math.min(s, STEPS.length-1);
+  });
+  const [variant, setVariant] = useState(() => localStorage.getItem('vh_variant') || 'receipt');
+  const [data, setData] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('vh_data')) || defaultData();
+    } catch { return defaultData(); }
+  });
+
+  function defaultData() {
+    return { who:null, location:'', currentSource:null, generatorKVA:5, energyDirection:null, appliances:[] };
+  }
+
+  useEffect(() => { localStorage.setItem('vh_step', String(step)); }, [step]);
+  useEffect(() => { localStorage.setItem('vh_variant', variant); }, [variant]);
+  useEffect(() => { localStorage.setItem('vh_data', JSON.stringify(data)); }, [data]);
+
+  const update = (patch) => setData(d => ({ ...d, ...patch }));
+  const toggleAppl = (a) => setData(d => {
+    const exists = d.appliances.find(x=>x.id===a.id);
+    return { ...d, appliances: exists ? d.appliances.filter(x=>x.id!==a.id) : [...d.appliances, { id:a.id, name:a.name, watts:a.w, hours:a.h }] };
+  });
+  const setHours = (id, h) => setData(d => ({ ...d, appliances: d.appliances.map(x => x.id===id ? { ...x, hours:h } : x) }));
+
+  const id = STEPS[step].id;
+  const canContinue = (() => {
+    switch (id) {
+      case 'hero':      return true;
+      case 'who':       return !!data.who;
+      case 'location':  return data.location.trim().length > 1;
+      case 'current':   return !!data.currentSource;
+      case 'direction': return !!data.energyDirection;
+      case 'loads':     return data.appliances.length >= 1;
+      default:          return true;
+    }
+  })();
+  const continueMsg = {
+    who:'PICK ONE TO CONTINUE', location:'ENTER A LOCATION', current:'PICK A BASELINE',
+    direction:'PICK A DIRECTION', loads:'ADD AT LEAST ONE APPLIANCE'
+  }[id] || '';
+
+  const next = () => setStep(s => Math.min(s+1, STEPS.length-1));
+  const back = () => setStep(s => Math.max(s-1, 0));
+  const restart = () => { setStep(0); setData(defaultData()); };
+
+  const renderStep = () => {
+    if (id==='hero')      return <window.VH_HeroStep onNext={next}/>;
+    if (id==='who')       return <window.VH_WhoStep value={data.who} onChange={(v)=>update({who:v})}/>;
+    if (id==='location')  return <window.VH_LocationStep value={data.location} onChange={(v)=>update({location:v})}/>;
+    if (id==='current')   return <window.VH_CurrentStep value={data.currentSource} kva={data.generatorKVA}
+                                     onChange={(v)=>update({currentSource:v})} onKva={(v)=>update({generatorKVA:v})}/>;
+    if (id==='direction') return <window.VH_DirectionStep value={data.energyDirection} onChange={(v)=>update({energyDirection:v})}/>;
+    if (id==='loads')     return <window.VH_LoadStep items={data.appliances} onToggle={toggleAppl} onHours={setHours}/>;
+    if (id==='reveal') {
+      if (window.P2_RevealInteractive) {
+        window.VH_PLAN_LIVE = computePlan(data);
+        const priority = data.energyDirection === 'sustain' ? 'sustain'
+                       : data.who === 'community' ? 'reliability' : 'cost';
+        return (
+          <div style={{ padding:'48px 24px 110px', maxWidth:820, margin:'0 auto' }}>
+            <window.P2_RevealInteractive start={priority}/>
+            <div style={{ marginTop:24, display:'flex', gap:12, flexWrap:'wrap' }}>
+              <button className="vh-btn vh-btn-primary">Get quotes from 3 vetted installers <window.VH_Icon.IconArrowRight size={16}/></button>
+              <button className="vh-btn vh-btn-secondary"><window.VH_Icon.IconShare size={14}/> Share plan</button>
+              <button className="vh-btn vh-btn-ghost" onClick={restart}><window.VH_Icon.IconRefresh size={14}/> Start over</button>
+            </div>
+          </div>
+        );
+      }
+      return <window.VH_RevealStep data={data} onRestart={restart}/>;
+    }
+  };
+
+  const showPanel = id !== 'hero' && id !== 'reveal';
+  const PanelComp = getPanelComp(variant);
+
+  return (
+    <div className="vh-app">
+      <window.VH_TopBar step={step+1} total={STEPS.length} onRestart={restart}/>
+      {showPanel ? (
+        <div className="vh-split">
+          <div key={step} style={{ overflowY:'auto', display:'flex', flexDirection:'column' }}>
+            <div style={{ flex:1 }}>{renderStep()}</div>
+            <window.VH_FooterNav onBack={back} onNext={next} canContinue={canContinue} canContinueMsg={continueMsg}/>
+          </div>
+          <div className="vh-plan">
+            <PanelComp data={data} step={step}/>
+          </div>
+        </div>
+      ) : (
+        <div key={step} style={{ flex:1, display:'flex', flexDirection:'column' }}>
+          <div style={{ flex:1, display:'flex' }}>{renderStep()}</div>
+          {id==='reveal' && (
+            <div style={{ padding:'14px 24px', borderTop:'1px solid var(--vh-line)', display:'flex', justifyContent:'flex-start' }}>
+              <button className="vh-btn vh-btn-ghost" onClick={back}>
+                <window.VH_Icon.IconArrowLeft size={16}/> Back to loads
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {showPanel && (
+        <div className="vh-variant-bar">
+          <div className="label">PANEL</div>
+          {PANEL_VARIANTS.map(v => (
+            <button key={v.id} data-active={variant===v.id} onClick={()=>setVariant(v.id)}>{v.label}</button>
+          ))}
+        </div>
+      )}
+      {id !== 'hero' && (
+        <>
+          {showPanel && <style>{`.pria-voice-btn,.pria-voice-card{bottom:90px!important}`}</style>}
+          <PriaVoiceController/>
+        </>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

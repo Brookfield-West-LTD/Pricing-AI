@@ -1,0 +1,253 @@
+/* Volt Horizon — Motion layer
+   Every animation here is purposeful: it encodes a product metaphor
+   (power flowing, panels generating, Pria thinking, cost falling, grid becoming clean). */
+
+/* ========== KEYFRAMES ========== */
+
+/* Orbit — energy flowing around the plan */
+@keyframes vh-orbit { to { transform: rotate(360deg); } }
+@keyframes vh-orbit-reverse { to { transform: rotate(-360deg); } }
+
+/* Spiral — a single dot spiraling into the payback point */
+@keyframes vh-spiral-in {
+  0%   { offset-distance: 0%;   opacity: 0; }
+  10%  { opacity: 1; }
+  95%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+/* Float — the sun/panel bob, gentle vertical drift */
+@keyframes vh-float {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-6px); }
+}
+
+/* Shimmer — current moving along a wire */
+@keyframes vh-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+/* Flip — appliance card rotating through states (off → on) */
+@keyframes vh-flip-y {
+  0%   { transform: rotateY(0deg); }
+  50%  { transform: rotateY(180deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+/* Rotate with scale — pria thinking ring */
+@keyframes vh-rotate-breathe {
+  0%,100% { transform: rotate(0deg)   scale(1); }
+  50%     { transform: rotate(180deg) scale(1.04); }
+}
+
+/* Grain — the SVG noise layer slowly drifts so the screen feels alive */
+@keyframes vh-grain {
+  0%,100% { transform: translate(0, 0); }
+  25%     { transform: translate(-8px, 4px); }
+  50%     { transform: translate(6px, -6px); }
+  75%     { transform: translate(-4px, 8px); }
+}
+
+/* Glow pulse — atmospheric voltage glow breathing */
+@keyframes vh-glow {
+  0%,100% { opacity: .55; transform: scale(1);    }
+  50%     { opacity: .85; transform: scale(1.08); }
+}
+
+/* Typing caret */
+@keyframes vh-caret { 0%,50% { opacity: 1; } 51%,100% { opacity: 0; } }
+
+/* Dash — drawing a line along a path */
+@keyframes vh-dash { to { stroke-dashoffset: 0; } }
+
+/* Streaming data — bars filling and emptying like live load */
+@keyframes vh-stream {
+  0%   { transform: scaleY(0.2); }
+  50%  { transform: scaleY(1);   }
+  100% { transform: scaleY(0.2); }
+}
+
+/* Marquee (seamless) — the live ticker under the hero */
+@keyframes vh-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Counter ticking — the number rolling up */
+@keyframes vh-tick { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+
+/* Spin variants */
+@keyframes vh-spin-slow { to { transform: rotate(360deg); } }
+
+/* Vertical drift for photo stack */
+@keyframes vh-drift-up {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+/* Ken burns — slow pan + zoom */
+@keyframes vh-kenburns {
+  0%   { transform: scale(1.08) translate(-2%, -1%); }
+  100% { transform: scale(1.18) translate(2%, 1%); }
+}
+
+/* Sun rise arc - vertical parallax */
+@keyframes vh-rise {
+  0%   { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+
+/* Generator flame flicker */
+@keyframes vh-flicker {
+  0%, 100% { opacity: .9; transform: scaleY(1);    }
+  33%      { opacity: .6; transform: scaleY(0.85); }
+  66%      { opacity: 1;  transform: scaleY(1.05); }
+}
+
+/* Spiral for central mark */
+@keyframes vh-spin-accel {
+  0%   { transform: rotate(0deg);   }
+  100% { transform: rotate(720deg); }
+}
+
+/* ========== COMPOSED PRIMITIVES ========== */
+
+.vh-orbit-layer {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  pointer-events: none;
+}
+.vh-orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(200,212,224,0.14);
+}
+.vh-orbit-ring[data-spin="true"]      { animation: vh-orbit 28s linear infinite; }
+.vh-orbit-ring[data-spin="reverse"]   { animation: vh-orbit-reverse 40s linear infinite; }
+.vh-orbit-ring[data-spin="fast"]      { animation: vh-orbit 14s linear infinite; }
+
+/* Floating satellite (sits on a ring) */
+.vh-orbit-sat {
+  position: absolute;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--vh-voltage);
+  box-shadow: 0 0 18px 0 var(--vh-voltage);
+}
+
+/* Atmospheric glow blobs */
+.vh-glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: vh-glow 9s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Wire — horizontal shimmering line, current flowing */
+.vh-wire {
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,107,53,0.0) 10%,
+    rgba(255,107,53,0.9) 50%,
+    rgba(255,107,53,0.0) 90%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: vh-shimmer 3.6s linear infinite;
+}
+.vh-wire-bio { background-image: linear-gradient(90deg, transparent, rgba(123,255,171,0.0) 10%, rgba(123,255,171,0.9) 50%, rgba(123,255,171,0.0) 90%, transparent); }
+.vh-wire-horizon { background-image: linear-gradient(90deg, transparent, rgba(88,200,255,0.0) 10%, rgba(88,200,255,0.9) 50%, rgba(88,200,255,0.0) 90%, transparent); }
+
+/* Live pulse ring — like a radar */
+.vh-radar {
+  position: relative; width: 10px; height: 10px;
+  border-radius: 50%; background: var(--vh-bio);
+  box-shadow: 0 0 14px 2px rgba(123,255,171,0.6);
+}
+.vh-radar::before,
+.vh-radar::after {
+  content:""; position:absolute; inset:-3px;
+  border: 1px solid rgba(123,255,171,0.6);
+  border-radius: 50%;
+  animation: vh-radar-ring 2.4s ease-out infinite;
+}
+.vh-radar::after { animation-delay: 1.2s; }
+@keyframes vh-radar-ring {
+  0%   { transform: scale(1);   opacity: 0.75; }
+  100% { transform: scale(4.2); opacity: 0;    }
+}
+
+/* Typing text */
+.vh-typing::after {
+  content: "▌";
+  color: var(--vh-voltage);
+  animation: vh-caret 900ms steps(1) infinite;
+  margin-left: 2px;
+  font-weight: 400;
+}
+
+/* Counter (digit column for rolling numbers) */
+.vh-counter { display: inline-flex; overflow: hidden; height: 1em; line-height: 1; }
+.vh-counter-col { display: inline-flex; flex-direction: column; animation: vh-tick 1.6s cubic-bezier(.2,.7,.2,1) forwards; }
+.vh-counter-col span { height: 1em; line-height: 1; }
+
+/* Flip card (front/back) */
+.vh-flip {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(.2,.7,.2,1);
+}
+.vh-flip[data-flipped="true"] { transform: rotateY(180deg); }
+.vh-flip-face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.vh-flip-back { transform: rotateY(180deg); }
+
+/* Auto flip loop */
+.vh-flip-loop { animation: vh-flip-y 7s cubic-bezier(.6,0,.4,1) infinite; transform-style: preserve-3d; }
+
+/* Streaming bars (live load visualization) */
+.vh-stream-bars { display: flex; align-items: flex-end; gap: 3px; height: 100%; }
+.vh-stream-bar  {
+  flex: 1;
+  background: linear-gradient(180deg, var(--vh-voltage-hot), var(--vh-voltage-deep));
+  border-radius: 1px;
+  transform-origin: bottom;
+  animation: vh-stream 1.6s ease-in-out infinite;
+}
+
+/* Grain overlay drift */
+.vh-grain-drift { animation: vh-grain 18s ease-in-out infinite; }
+
+/* Marquee */
+.vh-marquee-track {
+  display: inline-flex;
+  animation: vh-marquee 40s linear infinite;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+/* Spiral — powered by CSS motion-path */
+.vh-spiral-dot {
+  position: absolute;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--vh-voltage);
+  box-shadow: 0 0 14px 2px var(--vh-voltage);
+  offset-rotate: 0deg;
+}
+
+/* Sun icon — bob */
+.vh-bob { animation: vh-float 5.5s ease-in-out infinite; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .vh-orbit-ring, .vh-orbit-sat, .vh-glow-blob, .vh-wire, .vh-radar::before, .vh-radar::after,
+  .vh-typing::after, .vh-counter-col, .vh-flip-loop, .vh-stream-bar, .vh-grain-drift,
+  .vh-marquee-track, .vh-spiral-dot, .vh-bob, .vh-pria {
+    animation: none !important;
+  }
+}

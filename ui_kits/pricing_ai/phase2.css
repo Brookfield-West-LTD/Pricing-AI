@@ -1,0 +1,315 @@
+/* Volt Horizon — Phase 2 · Adaptive priority on reveal
+   Shared: re-ranking motion, change-priority pill
+   Unique: cost-first (voltage), reliability-first (day/night ring), sustainability-first (bio aura)
+*/
+
+/* ===================================================================
+   SHARED REVEAL SCAFFOLD
+=================================================================== */
+
+.rv2 {
+  background: var(--vh-surface-000);
+  border: 1px solid var(--vh-line);
+  border-radius: 20px;
+  padding: 48px 52px 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* atmosphere wash behind hero */
+.rv2::before {
+  content: "";
+  position: absolute;
+  inset: -20% -5% auto -5%;
+  height: 60%;
+  background: radial-gradient(ellipse 60% 80% at 50% 0%, var(--rv-atmos, rgba(255,107,53,0.08)), transparent 70%);
+  pointer-events: none;
+}
+
+.rv2-eyebrow {
+  font-family: var(--vh-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--rv-accent, var(--vh-voltage));
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.rv2-title {
+  font-family: var(--vh-font-display);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  font-size: 48px;
+  color: var(--vh-text-000);
+  margin: 0 0 10px;
+  max-width: 780px;
+  position: relative;
+}
+.rv2-title em { font-style: italic; font-weight: 500; color: var(--rv-accent, var(--vh-voltage)); }
+
+.rv2-lede {
+  font-family: var(--vh-font-body);
+  font-size: 15px;
+  color: var(--vh-text-200);
+  line-height: 1.55;
+  max-width: 620px;
+  margin: 0 0 30px;
+  position: relative;
+}
+
+/* ===================================================================
+   HERO NUMBER · 3 visual families (cost, reliability, sustainability)
+=================================================================== */
+
+.rv2-hero {
+  position: relative;
+  padding: 32px 32px 30px;
+  border: 1px solid var(--vh-line);
+  border-radius: var(--vh-r-lg);
+  background: var(--vh-surface-100);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.rv2-hero-kind {
+  font-family: var(--vh-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--vh-text-300);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.rv2-hero-number {
+  font-family: var(--vh-font-mono);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  margin-bottom: 12px;
+}
+
+.rv2-hero-sub {
+  font-family: var(--vh-font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--vh-text-300);
+}
+
+/* ---- Cost hero (voltage gradient) ---- */
+.rv2-hero[data-style="cost"] {
+  --rv-accent: var(--vh-voltage);
+  --rv-atmos:  rgba(255,107,53,0.09);
+}
+.rv2-hero[data-style="cost"] .rv2-hero-number {
+  font-size: 104px;
+  background: linear-gradient(180deg, var(--vh-voltage-hot), var(--vh-voltage-deep));
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+}
+
+/* ---- Reliability hero (mono + day/night ring) ---- */
+.rv2-hero[data-style="reliability"] {
+  --rv-accent: var(--vh-horizon);
+  --rv-atmos:  rgba(88,200,255,0.06);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+}
+.rv2-hero[data-style="reliability"] .rv2-hero-number {
+  font-size: 104px;
+  color: var(--vh-text-000);
+}
+.rv2-hero[data-style="reliability"] .rv2-hero-number sup {
+  font-size: 0.32em;
+  vertical-align: 0.6em;
+  margin-left: 8px;
+  color: var(--vh-text-200);
+  font-weight: 400;
+  letter-spacing: 0.18em;
+}
+
+/* Day/night ring — 240×240, sliced into 24 hour-wedges */
+.rv2-ring {
+  width: 240px; height: 240px;
+  flex-shrink: 0;
+  position: relative;
+}
+.rv2-ring svg { width: 100%; height: 100%; display: block; }
+.rv2-ring-core {
+  position: absolute; inset: 24%;
+  border-radius: 50%;
+  background: var(--vh-surface-000);
+  border: 1px solid var(--vh-line);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: var(--vh-font-mono);
+}
+.rv2-ring-core .n {
+  font-size: 40px; font-weight: 500; color: var(--vh-text-000);
+  letter-spacing: -0.02em; line-height: 1;
+}
+.rv2-ring-core .l {
+  font-size: 8.5px; letter-spacing: 0.22em; color: var(--vh-text-300);
+  text-transform: uppercase; margin-top: 4px;
+}
+.rv2-ring-wedge {
+  transition: opacity 800ms ease;
+}
+.rv2-ring-wedge[data-state="covered"] {
+  fill: var(--vh-bio);
+  opacity: 0.85;
+  filter: drop-shadow(0 0 6px rgba(123,255,171,0.35));
+}
+.rv2-ring-wedge[data-state="edge"]    { fill: var(--vh-voltage); opacity: 0.7; }
+.rv2-ring-wedge[data-state="gap"]     { fill: var(--vh-line);    opacity: 0.45; }
+
+/* sun/moon markers on ring */
+.rv2-ring-mark {
+  font-family: var(--vh-font-mono); font-size: 8.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; fill: var(--vh-text-300);
+}
+
+/* ---- Sustainability hero (bio aura) ---- */
+.rv2-hero[data-style="sustain"] {
+  --rv-accent: var(--vh-bio);
+  --rv-atmos:  rgba(123,255,171,0.08);
+  background: radial-gradient(ellipse 90% 120% at 50% 50%, rgba(123,255,171,0.06), transparent 70%), var(--vh-surface-100);
+  border-color: rgba(123,255,171,0.28);
+}
+.rv2-hero[data-style="sustain"] .rv2-hero-number {
+  font-size: 104px;
+  background: linear-gradient(180deg, var(--vh-bio), var(--vh-bio-deep));
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 44px rgba(123,255,171,0.18);
+  position: relative;
+  display: inline-block;
+}
+/* the soft bio aura behind the number */
+.rv2-hero[data-style="sustain"] .rv2-hero-number::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10%;
+  background: radial-gradient(ellipse 70% 85% at 50% 55%, rgba(123,255,171,0.28), transparent 70%);
+  filter: blur(18px);
+  z-index: -1;
+  animation: rv2-aura 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes rv2-aura {
+  0%,100% { opacity: 0.72; transform: scale(1); }
+  50%     { opacity: 1;    transform: scale(1.05); }
+}
+
+/* ===================================================================
+   SUPPORTING METRIC CARDS · slide into new positions
+=================================================================== */
+
+.rv2-metric-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.rv2-metric {
+  background: var(--vh-surface-100);
+  border: 1px solid var(--vh-line);
+  border-radius: var(--vh-r-md);
+  padding: 20px 22px;
+  transition:
+    transform 480ms cubic-bezier(.16,1,.3,1),
+    border-color 300ms,
+    box-shadow 300ms;
+  position: relative;
+}
+.rv2-metric-kind {
+  font-family: var(--vh-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--vh-text-300);
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.rv2-metric-kind .pos {
+  padding: 2px 6px; border-radius: 3px;
+  background: var(--vh-surface-200);
+  color: var(--vh-text-200); font-size: 9px;
+}
+.rv2-metric-value {
+  font-family: var(--vh-font-mono);
+  font-weight: 500; font-size: 34px;
+  color: var(--vh-text-000);
+  letter-spacing: -0.01em; line-height: 1;
+}
+.rv2-metric-sub {
+  font-family: var(--vh-font-body);
+  font-size: 12.5px; color: var(--vh-text-200);
+  margin-top: 6px;
+}
+
+/* ===================================================================
+   "CHANGE WHAT MATTERS MOST" PILL
+=================================================================== */
+
+.rv2-priority-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 8px 14px 8px 10px;
+  border-radius: 999px;
+  background: var(--vh-surface-100);
+  border: 1px solid var(--vh-line);
+  font-family: var(--vh-font-body); font-size: 12.5px;
+  color: var(--vh-text-200);
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(.2,.7,.2,1);
+}
+.rv2-priority-pill:hover {
+  border-color: var(--rv-accent, var(--vh-voltage));
+  color: var(--vh-text-000);
+}
+.rv2-priority-pill b { color: var(--vh-text-000); font-weight: 600; }
+.rv2-priority-pill .rv2-pill-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--rv-accent, var(--vh-voltage));
+  box-shadow: 0 0 6px var(--rv-accent, var(--vh-voltage));
+}
+
+/* priority picker — three radio-like chips */
+.rv2-priority-picker {
+  display: inline-flex; gap: 6px;
+  padding: 5px;
+  border-radius: 999px;
+  background: var(--vh-surface-100);
+  border: 1px solid var(--vh-line);
+}
+.rv2-priority-picker button {
+  padding: 8px 14px; border-radius: 999px;
+  background: transparent; border: 0;
+  font-family: var(--vh-font-body); font-size: 12.5px;
+  color: var(--vh-text-200);
+  cursor: pointer; transition: all 180ms;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.rv2-priority-picker button:hover { color: var(--vh-text-000); }
+.rv2-priority-picker button[aria-pressed="true"] {
+  background: var(--vh-surface-300);
+  color: var(--vh-text-000);
+  box-shadow: 0 0 0 1px var(--vh-line-hot);
+}
+.rv2-priority-picker button[aria-pressed="true"][data-kind="cost"]       { box-shadow: 0 0 0 1px var(--vh-voltage); color: var(--vh-voltage-hot); }
+.rv2-priority-picker button[aria-pressed="true"][data-kind="reliability"]{ box-shadow: 0 0 0 1px var(--vh-horizon); color: var(--vh-horizon); }
+.rv2-priority-picker button[aria-pressed="true"][data-kind="sustain"]    { box-shadow: 0 0 0 1px var(--vh-bio);     color: var(--vh-bio); }
+
+/* ===================================================================
+   REDUCED MOTION
+=================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .rv2-hero[data-style="sustain"] .rv2-hero-number::before { animation: none; }
+  .rv2-metric { transition: none; }
+}

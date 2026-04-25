@@ -1,0 +1,97 @@
+:root {
+  /* ── Surfaces ─────────────────────────────────────────────── */
+  --vh-void:         #05080C;
+  --vh-surface-000:  #0A0F14;
+  --vh-surface-100:  #0F1620;
+  --vh-surface-200:  #17202B;
+  --vh-surface-300:  #1F2B38;
+
+  /* ── Lines ────────────────────────────────────────────────── */
+  --vh-line:         #24323F;
+  --vh-line-hot:     #34495B;
+
+  /* ── Text ─────────────────────────────────────────────────── */
+  --vh-text-000: #F4F8FB;
+  --vh-text-100: #C8D4E0;
+  --vh-text-200: #8A9AAD;
+  --vh-text-300: #5A6B7F;
+
+  /* ── Voltage (coral-amber) ────────────────────────────────── */
+  --vh-voltage:      #FF6B35;
+  --vh-voltage-hot:  #FF8A5C;
+  --vh-voltage-deep: #D94E1F;
+  --vh-voltage-glow: rgba(255, 107, 53, 0.35);
+
+  /* ── Bio (photosynthesis green) ───────────────────────────── */
+  --vh-bio:          #7BFFAB;
+  --vh-bio-deep:     #3EDB7A;
+  --vh-bio-glow:     rgba(123, 255, 171, 0.30);
+
+  /* ── Horizon (cool cyan) ──────────────────────────────────── */
+  --vh-horizon:      #58C8FF;
+  --vh-horizon-deep: #2896D1;
+  --vh-horizon-glow: rgba(88, 200, 255, 0.28);
+
+  /* ── Semantic ─────────────────────────────────────────────── */
+  --vh-warn:    #FFB547;
+  --vh-danger:  #FF5470;
+  --vh-success: var(--vh-bio-deep);
+
+  /* ── Typography ───────────────────────────────────────────── */
+  --vh-font-display: 'Fraunces', 'Times New Roman', serif;
+  --vh-font-body:    'Inter Tight', system-ui, sans-serif;
+  --vh-font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* ── Font sizes ───────────────────────────────────────────── */
+  --vh-fs-display-xl: clamp(56px, 10vw, 128px);
+  --vh-fs-display-lg: 56px;
+  --vh-fs-display-md: 36px;
+  --vh-fs-headline:   24px;
+  --vh-fs-body-lg:    18px;
+  --vh-fs-body:       15px;
+  --vh-fs-caption:    13px;
+  --vh-fs-mono-label: 11px;
+  --vh-fs-data-big:   56px;
+  --vh-fs-data-mid:   32px;
+
+  /* ── Radii ────────────────────────────────────────────────── */
+  --vh-r-xs:   6px;
+  --vh-r-sm:   10px;
+  --vh-r-md:   14px;
+  --vh-r-lg:   20px;
+  --vh-r-xl:   28px;
+  --vh-r-full: 999px;
+
+  /* ── Motion ───────────────────────────────────────────────── */
+  --vh-ease:     cubic-bezier(0.2, 0.7, 0.2, 1);
+  --vh-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --vh-fast:     180ms;
+  --vh-base:     320ms;
+  --vh-slow:     560ms;
+  --vh-dur-fast: 180ms;
+  --vh-dur-base: 320ms;
+  --vh-dur-slow: 560ms;
+
+  /* ── Spacing (8px base) ───────────────────────────────────── */
+  --vh-s-1:  4px;
+  --vh-s-2:  8px;
+  --vh-s-3:  12px;
+  --vh-s-4:  16px;
+  --vh-s-5:  24px;
+  --vh-s-6:  32px;
+  --vh-s-7:  48px;
+  --vh-s-8:  64px;
+  --vh-s-9:  96px;
+
+  /* ── Elevation ────────────────────────────────────────────── */
+  --vh-elev-1:    0 1px 0 rgba(255,255,255,0.04) inset,
+                  0 10px 30px -10px rgba(0,0,0,0.6);
+  --vh-elev-2:    0 1px 0 rgba(255,255,255,0.06) inset,
+                  0 20px 60px -20px rgba(0,0,0,0.75);
+  --vh-elev-glow: 0 0 0 1px rgba(255, 107, 53, 0.35),
+                  0 20px 60px -20px rgba(255, 107, 53, 0.45);
+  --vh-elev-bio:  0 0 0 1px rgba(123, 255, 171, 0.30),
+                  0 20px 60px -20px rgba(123, 255, 171, 0.35);
+  --vh-inner-light: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+  --vh-elev-horizon: 0 0 40px rgba(88, 200, 255, 0.10);
+}

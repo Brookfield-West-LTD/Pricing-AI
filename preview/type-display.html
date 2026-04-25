@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding: 24px; background: var(--vh-surface-000); min-height: 100vh; }
+  .stack { display:grid; gap: 10px; }
+  .row {
+    background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-md); padding: 18px 22px;
+  }
+  .tag { display:flex; justify-content:space-between; font-family: var(--vh-font-mono); font-size: 10px; letter-spacing:.15em; text-transform:uppercase; color: var(--vh-text-200); margin-bottom: 10px; }
+  .tag b { color: var(--vh-voltage); font-weight: 500; }
+  .xl { font-family: var(--vh-font-display); font-weight: 300; font-size: 64px; line-height: 0.92; letter-spacing: -0.035em; color: var(--vh-text-000); }
+  .xl em { font-style: italic; font-weight: 500; color: var(--vh-voltage); }
+  .lg { font-family: var(--vh-font-display); font-weight: 300; font-size: 40px; line-height: 1; letter-spacing: -0.025em; color: var(--vh-text-000); }
+  .lg em { font-style: italic; font-weight: 500; color: var(--vh-voltage); }
+  .md { font-family: var(--vh-font-display); font-weight: 500; font-size: 28px; line-height: 1.1; letter-spacing: -0.02em; color: var(--vh-text-000); }
+</style></head>
+<body class="vh-atmosphere">
+  <div class="stack">
+    <div class="row">
+      <div class="tag"><span>DISPLAY · XL</span><span><b>Fraunces</b> · 96–128 / 300 + italic 500</span></div>
+      <div class="xl">Your energy <em>future</em>.</div>
+    </div>
+    <div class="row">
+      <div class="tag"><span>DISPLAY · LG</span><span><b>Fraunces</b> · 56 / 300 / -2.5%</span></div>
+      <div class="lg">One volt, <em>not</em> many.</div>
+    </div>
+    <div class="row">
+      <div class="tag"><span>DISPLAY · MD</span><span><b>Fraunces</b> · 36 / 500 / -2%</span></div>
+      <div class="md">Hybrid solar + battery</div>
+    </div>
+  </div>
+</body></html>

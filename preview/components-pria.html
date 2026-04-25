@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 28px; background: var(--vh-surface-000); min-height: 100vh; display: grid; align-content: center; gap: 18px; }
+  .row { display: flex; align-items: center; gap: 18px; }
+
+  .pria {
+    width: 56px; height: 56px; border-radius: 50%; position: relative; flex-shrink: 0;
+    background:
+      conic-gradient(from 140deg at 50% 50%,
+        #FF6B35 0%, #7BFFAB 22%, #58C8FF 48%, #FF6B35 72%, #7BFFAB 100%);
+    filter: blur(0.15px);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 10px 30px -10px rgba(0,0,0,.7), 0 0 22px -4px rgba(255,107,53,.35);
+    animation: spin 18s linear infinite;
+  }
+  .pria::before {
+    content: ''; position: absolute; inset: 6px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.35), transparent 55%), var(--vh-surface-000);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .bubble {
+    background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: 6px 22px 22px 22px; padding: 16px 20px; max-width: 520px;
+    font-family: var(--vh-font-body); font-size: 15px; line-height: 1.5; color: var(--vh-text-000);
+  }
+  .bubble .name { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--vh-text-300); margin-bottom: 6px; }
+  .bubble em { font-style: italic; font-family: var(--vh-font-display); color: var(--vh-voltage); font-weight: 500; }
+
+  .you {
+    margin-left: 74px;
+    background: transparent; border: 1px solid var(--vh-line);
+    border-radius: 22px 22px 6px 22px; padding: 14px 20px; max-width: 420px;
+    font-family: var(--vh-font-body); font-size: 15px; color: var(--vh-text-100);
+  }
+</style></head>
+<body class="vh-atmosphere">
+  <div class="row">
+    <div class="pria" aria-label="Pria avatar"></div>
+    <div class="bubble">
+      <div class="name">PRIA</div>
+      One question: when <em>NEPA</em> goes, which circuits <em>must</em> stay on?
+    </div>
+  </div>
+  <div class="you">Freezer, two fans, the router, and the kids' study lamp. Everything else can sleep.</div>
+</body></html>

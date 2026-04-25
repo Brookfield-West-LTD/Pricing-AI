@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background: var(--vh-surface-000); min-height:100vh; display:flex; align-items:center; }
+  .ramp { flex:1; display:grid; grid-template-columns: repeat(8, 1fr); gap: 2px; border-radius: var(--vh-r-md); overflow:hidden; border: 1px solid var(--vh-line); }
+  .cell {
+    padding: 28px 12px; font-family: var(--vh-font-mono); font-size: 10px;
+    letter-spacing:.15em; text-transform: uppercase;
+    display:flex; flex-direction:column; justify-content:space-between; min-height: 120px;
+  }
+  .cell span { font-size: 9px; opacity: .65; margin-top: 6px; }
+</style></head>
+<body class="vh-atmosphere">
+  <div class="ramp">
+    <div class="cell" style="background:#05080C; color:#5A6B7F;">VOID<span>#05080C</span></div>
+    <div class="cell" style="background:#0A0F14; color:#5A6B7F;">S·000<span>#0A0F14</span></div>
+    <div class="cell" style="background:#0F1620; color:#8A9AAD;">S·100<span>#0F1620</span></div>
+    <div class="cell" style="background:#17202B; color:#8A9AAD;">S·200<span>#17202B</span></div>
+    <div class="cell" style="background:#1F2B38; color:#C8D4E0;">S·300<span>#1F2B38</span></div>
+    <div class="cell" style="background:#5A6B7F; color:#F4F8FB;">T·300<span>#5A6B7F</span></div>
+    <div class="cell" style="background:#C8D4E0; color:#0A0F14;">T·100<span>#C8D4E0</span></div>
+    <div class="cell" style="background:#F4F8FB; color:#0A0F14;">T·000<span>#F4F8FB</span></div>
+  </div>
+</body></html>

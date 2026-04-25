@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding: 24px; background: var(--vh-surface-000); min-height: 100vh; display:grid; gap: 10px; align-content: center; }
+  .row {
+    background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-md); padding: 22px;
+  }
+  .tag { display:flex; justify-content:space-between; font-family: var(--vh-font-mono); font-size: 10px; letter-spacing:.15em; text-transform:uppercase; color: var(--vh-text-200); margin-bottom: 10px; }
+  .tag b { color: var(--vh-voltage); font-weight: 500; }
+  .big {
+    font-family: var(--vh-font-mono); font-weight: 500; font-size: 56px; line-height: 1; letter-spacing: -0.02em;
+    background: linear-gradient(180deg, var(--vh-voltage-hot), var(--vh-voltage-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .mid { font-family: var(--vh-font-mono); font-weight: 500; font-size: 32px; line-height: 1; color: var(--vh-text-000); }
+  .sub { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing:.18em; text-transform:uppercase; color: var(--vh-text-200); margin-top: 6px; }
+</style></head>
+<body class="vh-atmosphere">
+  <div class="row">
+    <div class="tag"><span>DATA · BIG — hero number</span><span><b>JetBrains Mono</b> · 56 · gradient fill</span></div>
+    <div class="big">₦4,280,000</div>
+    <div class="sub">TOTAL ESTIMATED · ±15% CONFIDENCE</div>
+  </div>
+  <div class="row">
+    <div class="tag"><span>DATA · MID — metric</span><span><b>JetBrains Mono</b> · 32 / solid</span></div>
+    <div class="mid">5 kW <span style="color: var(--vh-text-200); font-size: 16px;">· 6.2 kWh/d · 2.2y</span></div>
+  </div>
+</body></html>

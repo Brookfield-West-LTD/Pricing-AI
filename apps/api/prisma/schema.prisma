@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Plan {
+  id          String   @id @default(cuid())
+  shareToken  String   @unique @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  loadProfile  LoadProfile?
+  systemDesign SystemDesign?
+  boq          BOQ?
+  cashflow     CashflowModel?
+  schedule     Schedule?
+  reports      Report[]
+  quotes       Quote[]
+}
+
+model LoadProfile {
+  id              String  @id @default(cuid())
+  planId          String  @unique
+  plan            Plan    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  who             String
+  location        String
+  lat             Float?
+  lng             Float?
+  currentSource   String
+  energyDirection String
+  appliancesJson  Json
+  dailyKwh        Float?
+  peakKw          Float?
+}
+
+model SystemDesign {
+  id            String @id @default(cuid())
+  planId        String @unique
+  plan          Plan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+  panelKw       Float
+  inverterKw    Float
+  batteryKwh    Float
+  componentJson Json
+}
+
+model BOQ {
+  id            String @id @default(cuid())
+  planId        String @unique
+  plan          Plan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+  fxRateUsed    Float
+  totalNgn      Float
+  lineItemsJson Json
+}
+
+model CashflowModel {
+  id              String @id @default(cuid())
+  planId          String @unique
+  plan            Plan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+  paybackMonths   Int?
+  npvNgn          Float?
+  irr             Float?
+  monthlyRowsJson Json
+}
+
+model Schedule {
+  id        String @id @default(cuid())
+  planId    String @unique
+  plan      Plan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+  ganttJson Json
+}
+
+model Report {
+  id        String   @id @default(cuid())
+  planId    String
+  plan      Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  format    String
+  s3Key     String
+  url       String?
+  expiresAt DateTime?
+  createdAt DateTime @default(now())
+}
+
+model Quote {
+  id          String    @id @default(cuid())
+  planId      String
+  plan        Plan      @relation(fields: [planId], references: [id], onDelete: Cascade)
+  installerId String
+  installer   Installer @relation(fields: [installerId], references: [id])
+  status      String    @default("pending")
+  createdAt   DateTime  @default(now())
+}
+
+model Installer {
+  id     String   @id @default(cuid())
+  name   String
+  states String[]
+  tier   String   @default("basic")
+  quotes Quote[]
+}
+
+model LoanProduct {
+  id           String  @id @default(cuid())
+  lender       String
+  name         String
+  minAmount    Float
+  maxAmount    Float
+  tenorMonths  Int
+  ratePercent  Float
+  active       Boolean @default(true)
+}

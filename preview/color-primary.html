@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding:24px; background: var(--vh-surface-000); min-height: 100vh; display:flex; align-items:stretch; }
+  .card { flex:1; display:flex; gap:14px; align-items:stretch; }
+  .swatch {
+    flex:1; border-radius: var(--vh-r-lg); padding: 20px; min-height: 180px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    border: 1px solid var(--vh-line); position:relative; overflow:hidden;
+  }
+  .swatch.hero {
+    background: radial-gradient(circle at 30% 30%, var(--vh-voltage-hot), var(--vh-voltage-deep) 60%, var(--vh-void) 130%);
+  }
+  .swatch.hero::after {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(circle at 70% 80%, rgba(123,255,171,0.22), transparent 50%);
+  }
+  .swatch.hero > * { position:relative; z-index:1; }
+  .label { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing:.18em; text-transform:uppercase; color: rgba(255,255,255,.65); }
+  .name { font-family: var(--vh-font-display); font-weight: 300; font-size: 40px; line-height: .95; letter-spacing: -0.025em; color: var(--vh-text-000); }
+  .name em { font-style: italic; font-weight: 500; }
+  .meta { font-family: var(--vh-font-mono); font-size: 11px; color: rgba(255,255,255,.85); display:grid; gap:3px; }
+  .meta strong { color: rgba(255,255,255,.55); font-weight: 500; font-size: 9px; letter-spacing:.1em; text-transform: uppercase; margin-right: 8px; }
+  .strip { width: 220px; display:grid; gap: 8px; }
+  .tone {
+    display:flex; align-items:center; gap: 10px; padding: 10px 12px; border-radius: var(--vh-r-sm);
+    border: 1px solid var(--vh-line); background: var(--vh-surface-100);
+  }
+  .chip { width: 28px; height: 28px; border-radius: var(--vh-r-xs); flex-shrink:0; }
+  .tone-name { font-family: var(--vh-font-mono); font-size: 9px; letter-spacing:.15em; text-transform:uppercase; color: var(--vh-text-200); }
+  .tone-hex  { font-family: var(--vh-font-mono); font-size: 12px; color: var(--vh-text-000); font-weight: 500; }
+</style></head>
+<body class="vh-atmosphere">
+  <div class="card">
+    <div class="swatch hero">
+      <div>
+        <div class="label">PRIMARY · VOLTAGE</div>
+        <div class="name" style="margin-top:8px;">First <em>voltage</em></div>
+      </div>
+      <div class="meta">
+        <div><strong>HEX</strong>#FF6B35</div>
+        <div><strong>USE</strong>CTAs · HIGHLIGHTS · LIVE STATES</div>
+        <div><strong>RULE</strong>NEVER &gt;10% OF A SCREEN</div>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="tone"><div class="chip" style="background:#FF8A5C;"></div><div><div class="tone-name">HOT</div><div class="tone-hex">#FF8A5C</div></div></div>
+      <div class="tone"><div class="chip" style="background:#FF6B35;"></div><div><div class="tone-name">BASE</div><div class="tone-hex">#FF6B35</div></div></div>
+      <div class="tone"><div class="chip" style="background:#D94E1F;"></div><div><div class="tone-name">DEEP</div><div class="tone-hex">#D94E1F</div></div></div>
+    </div>
+  </div>
+</body></html>

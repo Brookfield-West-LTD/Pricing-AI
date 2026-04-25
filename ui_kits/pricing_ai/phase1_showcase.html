@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Pricing AI — Phase 1 · Adaptive Sequencing</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../../colors_and_type.css"/>
+<link rel="stylesheet" href="ui_kit.css"/>
+<link rel="stylesheet" href="motion.css"/>
+<link rel="stylesheet" href="pria.css"/>
+<link rel="stylesheet" href="phase1.css"/>
+<style>
+  html, body { margin: 0; padding: 0; background: var(--vh-surface-000); color: var(--vh-text-000); min-height: 100vh; }
+</style>
+</head>
+<body class="vh-atmosphere">
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="shaders.jsx"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="pria.jsx"></script>
+<script type="text/babel" src="phase1.jsx"></script>
+
+<script type="text/babel">
+const {
+  P1_ContextEngineDiagram, P1_BillConfirmation, P1_DiagnosticStep, P1_SkipNotice,
+  Pria_Orb,
+  DesignCanvas, DCSection, DCArtboard, DCPostIt,
+} = window;
+
+function Showcase() {
+  return (
+    <DesignCanvas>
+      <DCSection
+        id="phase-1-intro"
+        title="Phase 1 — Adaptive sequencing"
+        subtitle="The flow reshapes itself around who each user is. Three deliverables: the context engine, the bill-confirmation step, the diagnostic chat. Plus the motion rule that announces every prune, injection, or compression."
+      >
+        <DCArtboard id="ce" label="A · Context engine — editorial decision tree" width={1120} height={720}>
+          <P1_ContextEngineDiagram/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="phase-1-bill"
+        title="B — Bill upload confirmation"
+        subtitle="Replaces the appliance-picker when we already have a bill. Inline edit per field triggers Pria's re-run signal."
+      >
+        <DCArtboard id="bill-default"  label="Default · all four metrics confirmed"     width={1120} height={860}>
+          <P1_BillConfirmation metricMode="default"/>
+        </DCArtboard>
+        <DCArtboard id="bill-editing"  label="Editing · tariff mid-edit, glow active"   width={1120} height={860}>
+          <P1_BillConfirmation metricMode="editing"/>
+        </DCArtboard>
+        <DCArtboard id="bill-rerun"    label="Re-run · plan recomputing after edit"      width={1120} height={860}>
+          <P1_BillConfirmation metricMode="rerun"/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="phase-1-diag"
+        title="C — Diagnostic conversation"
+        subtitle="Replaces the 4-pill direction step for users who pick 'help me choose'. Three adaptive questions → a recommended direction with a why-this-fits-you rationale."
+      >
+        <DCArtboard id="diag-q1"      label="Q1 · live · fridge-first / lights / wifi / medical" width={1120} height={720}>
+          <P1_DiagnosticStep stage="q1-open"/>
+        </DCArtboard>
+        <DCArtboard id="diag-q3"      label="Q3 · two turns banked, third active"                width={1120} height={720}>
+          <P1_DiagnosticStep stage="q3-open"/>
+        </DCArtboard>
+        <DCArtboard id="diag-verdict" label="Verdict · quiet hybrid inverter · why-this-fits-you" width={1120} height={1260}>
+          <P1_DiagnosticStep stage="verdict"/>
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection
+        id="phase-1-motion"
+        title="Motion — the skip notice"
+        subtitle="Every time the context engine prunes, injects, or compresses, a pill fades in at the top of the next step and self-dismisses after 4s. Here frozen, and in three variants."
+      >
+        <DCArtboard id="skip-prune"    label="Prune · skipped the appliance step"   width={720} height={180}>
+          <div style={{ padding: 40, background: 'var(--vh-surface-000)', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+            <P1_SkipNotice>
+              <b>Pria skipped the appliance step</b> — we already have what we need from your bill.
+            </P1_SkipNotice>
+          </div>
+        </DCArtboard>
+        <DCArtboard id="skip-inject"   label="Inject · replaced the direction step" width={720} height={180}>
+          <div style={{ padding: 40, background: 'var(--vh-surface-000)', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+            <P1_SkipNotice>
+              <b>Pria replaced the direction step</b> — you said <em>help me choose</em>, so we're talking it through.
+            </P1_SkipNotice>
+          </div>
+        </DCArtboard>
+        <DCArtboard id="skip-compress" label="Compress · 7 steps → 4 on mobile"      width={720} height={180}>
+          <div style={{ padding: 40, background: 'var(--vh-surface-000)', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
+            <P1_SkipNotice>
+              <b>Pria compressed the flow</b> — 7 steps folded into 4 for mobile.
+            </P1_SkipNotice>
+          </div>
+        </DCArtboard>
+
+        <DCArtboard id="skip-live"     label="Live · self-dismiss after 4s — refresh to replay" width={720} height={220}>
+          <div style={{ padding: 40, background: 'var(--vh-surface-000)', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', flexDirection: 'column', gap: 12 }}>
+            <P1_SkipNotice frozen={false}>
+              <b>Pria skipped the appliance step</b> — watch this fade.
+            </P1_SkipNotice>
+            <span style={{ fontFamily: 'var(--vh-font-mono)', fontSize: 9, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--vh-text-300)' }}>
+              IN 380MS · HOLD 4S · OUT 720MS
+            </span>
+          </div>
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Showcase/>);
+</script>
+</body>
+</html>

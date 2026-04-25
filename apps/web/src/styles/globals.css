@@ -1,0 +1,112 @@
+@import "tailwindcss";
+@import "./colors_and_type.css";
+@import "./motion.css";
+@import "./pria.css";
+
+@theme {
+  /* Colors — real hex values required for Tailwind v4 utility class generation */
+  --color-voltage:      #FF6B35;
+  --color-voltage-hot:  #FF8A5C;
+  --color-voltage-deep: #D94E1F;
+  --color-bio:          #7BFFAB;
+  --color-bio-deep:     #3EDB7A;
+  --color-horizon:      #58C8FF;
+  --color-surface-000:  #0A0F14;
+  --color-surface-100:  #0F1620;
+  --color-surface-200:  #17202B;
+  --color-surface-300:  #1F2B38;
+  --color-text-000:     #F4F8FB;
+  --color-text-200:     #8A9AAD;
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Inter Tight', 'Inter', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Radii */
+  --radius-xs:   6px;
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-full: 999px;
+
+  /* Motion */
+  --duration-fast: 180ms;
+  --duration-base: 320ms;
+  --duration-slow: 560ms;
+  --ease-vh:     cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-vh-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Base reset ─────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--vh-surface-000);
+  color: var(--vh-text-000);
+  font-family: var(--vh-font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Volt Horizon Keyframes ──────────────────────────────────── */
+@keyframes vh-orb-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes vh-pulse-halo {
+  0%   { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes vh-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes vh-assemble-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes vh-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes vh-ai-glow {
+  from { opacity: 0; box-shadow: 0 0 0 rgba(255,107,53,0); }
+  to   { opacity: 1; box-shadow: 0 0 32px rgba(255,107,53,0.25); }
+}
+
+@keyframes vh-dot-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.4); opacity: 0.6; }
+}
+
+/* stagger utilities */
+.vh-up   { animation: vh-assemble-up 320ms var(--vh-ease) both; }
+.vh-d1   { animation-delay: 50ms; }
+.vh-d2   { animation-delay: 100ms; }
+.vh-d3   { animation-delay: 150ms; }
+.vh-d4   { animation-delay: 200ms; }
+.vh-d5   { animation-delay: 250ms; }
+.vh-d6   { animation-delay: 300ms; }
+.vh-d7   { animation-delay: 400ms; }
+.vh-d8   { animation-delay: 500ms; }
+
+/* ai-glow badge for Pria-added elements */
+.vh-ai-glow { animation: vh-ai-glow 600ms var(--vh-ease) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; }
+}

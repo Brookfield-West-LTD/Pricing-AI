@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--vh-surface-000); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .plan {
+    width: 100%; max-width: 640px;
+    background: var(--vh-surface-100);
+    border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-lg);
+    overflow: hidden;
+    font-family: var(--vh-font-body);
+  }
+  .head {
+    padding: 18px 22px; border-bottom: 1px dashed var(--vh-line);
+    display: flex; align-items: baseline; justify-content: space-between;
+  }
+  .status { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--vh-bio); display: inline-flex; align-items: center; gap: 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--vh-bio); box-shadow: 0 0 10px 0 var(--vh-bio); animation: pulse 1.8s ease-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+  .rev { font-family: var(--vh-font-mono); font-size: 10px; color: var(--vh-text-300); letter-spacing: .12em; }
+  .body { padding: 22px; }
+  .hero {
+    font-family: var(--vh-font-display); font-weight: 300; font-size: 28px; line-height: 1.1; letter-spacing: -0.02em; color: var(--vh-text-000); margin-bottom: 2px;
+  }
+  .hero em { font-style: italic; font-weight: 500; color: var(--vh-voltage); }
+  .sub { font-size: 14px; color: var(--vh-text-200); margin-bottom: 18px; }
+
+  .line { display: grid; grid-template-columns: 1fr auto auto; gap: 18px; padding: 12px 0; border-bottom: 1px dashed var(--vh-line); font-size: 13px; }
+  .line:last-of-type { border-bottom: none; }
+  .item .name { color: var(--vh-text-000); }
+  .item .meta { font-family: var(--vh-font-mono); font-size: 10px; color: var(--vh-text-300); letter-spacing: .1em; margin-top: 3px; }
+  .qty { font-family: var(--vh-font-mono); color: var(--vh-text-200); font-size: 12px; align-self: center; }
+  .amt { font-family: var(--vh-font-mono); color: var(--vh-text-000); font-size: 13px; align-self: center; font-weight: 500; }
+
+  .total { padding: 18px 22px; background: var(--vh-surface-200); display: flex; justify-content: space-between; align-items: flex-end; }
+  .total .k { font-family: var(--vh-font-mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--vh-text-200); }
+  .big {
+    font-family: var(--vh-font-mono); font-weight: 500; font-size: 34px; line-height: 1; letter-spacing: -0.015em;
+    background: linear-gradient(180deg, var(--vh-voltage-hot), var(--vh-voltage-deep));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .conf { font-family: var(--vh-font-mono); font-size: 10px; color: var(--vh-text-300); letter-spacing: .1em; margin-top: 4px; }
+</style></head>
+<body class="vh-atmosphere">
+  <div class="plan">
+    <div class="head">
+      <div class="status"><span class="dot"></span> LIVE PLAN · ASSEMBLING</div>
+      <div class="rev">REV 03 · FX ₦1,580 / USD</div>
+    </div>
+    <div class="body">
+      <div class="hero">Hybrid <em>solar + battery</em>, sized for Lekki</div>
+      <div class="sub">6.2 kWh/day · 2 days lithium autonomy · 48-month payback at current diesel rates</div>
+
+      <div class="line item">
+        <div><div class="name">Canadian Solar 550W panels</div><div class="meta">× 10 · ROOF-MOUNTED · IN-STOCK LOS</div></div>
+        <div class="qty">10 ×</div>
+        <div class="amt">₦1,820,000</div>
+      </div>
+      <div class="line item">
+        <div><div class="name">Pylontech US5000 lithium stack</div><div class="meta">9.6 kWh · IP55 · FX-LINKED</div></div>
+        <div class="qty">2 ×</div>
+        <div class="amt">₦1,640,000</div>
+      </div>
+      <div class="line item">
+        <div><div class="name">Deye 5kW hybrid inverter</div><div class="meta">WIFI · 5YR WARRANTY</div></div>
+        <div class="qty">1 ×</div>
+        <div class="amt">₦580,000</div>
+      </div>
+      <div class="line item">
+        <div><div class="name">Install · rails · DC isolator · labour</div><div class="meta">LEKKI CREW · 2 DAYS</div></div>
+        <div class="qty">1 ×</div>
+        <div class="amt">₦240,000</div>
+      </div>
+    </div>
+    <div class="total">
+      <div>
+        <div class="k">— TOTAL · ESTIMATED</div>
+        <div class="conf">±15% CONFIDENCE · LOCKED AT SIGN-OFF</div>
+      </div>
+      <div class="big">₦4,280,000</div>
+    </div>
+  </div>
+</body></html>

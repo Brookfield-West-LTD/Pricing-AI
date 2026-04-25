@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin:0; padding: 24px; background: var(--vh-surface-000); min-height: 100vh; }
+  .stack { display:grid; gap: 10px; }
+  .row {
+    background: var(--vh-surface-100); border: 1px solid var(--vh-line);
+    border-radius: var(--vh-r-md); padding: 18px 22px;
+  }
+  .tag { display:flex; justify-content:space-between; font-family: var(--vh-font-mono); font-size: 10px; letter-spacing:.15em; text-transform:uppercase; color: var(--vh-text-200); margin-bottom: 10px; }
+  .tag b { color: var(--vh-voltage); font-weight: 500; }
+  .headline { font-family: var(--vh-font-body); font-weight: 600; font-size: 22px; line-height: 1.25; letter-spacing: -0.015em; color: var(--vh-text-000); }
+  .body-lg { font-family: var(--vh-font-body); font-size: 16px; line-height: 1.55; color: var(--vh-text-100); }
+  .body    { font-family: var(--vh-font-body); font-size: 14px; line-height: 1.55; color: var(--vh-text-100); }
+  .mono    { font-family: var(--vh-font-mono); font-weight: 500; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--vh-text-200); }
+</style></head>
+<body class="vh-atmosphere">
+  <div class="stack">
+    <div class="row">
+      <div class="tag"><span>HEADLINE — UI</span><span><b>Inter Tight</b> · 24 / 600</span></div>
+      <div class="headline">What needs to stay on?</div>
+    </div>
+    <div class="row">
+      <div class="tag"><span>BODY — default</span><span><b>Inter Tight</b> · 15 / 400 / line 1.55</span></div>
+      <div class="body-lg" style="margin-bottom: 8px;">Pria sized this plan for your 6 kWh/day load in Lekki, with two days of lithium autonomy.</div>
+      <div class="body">Every line item traces to a source. FX-linked components are re-priced each time you open this plan — we note the rate used at the top.</div>
+    </div>
+    <div class="row">
+      <div class="tag"><span>MONO — label</span><span><b>JetBrains Mono</b> · 11 / 500 / +18%</span></div>
+      <div class="mono">— LIVE PLAN · ASSEMBLING</div>
+    </div>
+  </div>
+</body></html>

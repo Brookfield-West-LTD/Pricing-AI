@@ -1,0 +1,57 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@pricing-ai/ui": [
+        "../../packages/ui/src/index.ts"
+      ],
+      "@pricing-ai/ui/*": [
+        "../../packages/ui/src/*"
+      ],
+      "@pricing-ai/shared": [
+        "../../packages/shared/src/index.ts"
+      ],
+      "@pricing-ai/zod-schemas": [
+        "../../packages/zod-schemas/src/index.ts"
+      ],
+      "@pricing-ai/sizing-engine": [
+        "../../packages/sizing-engine/src/index.ts"
+      ],
+      "@pricing-ai/financial-model": [
+        "../../packages/financial-model/src/index.ts"
+      ]
+    },
+    "allowJs": true,
+    "noEmit": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "../../packages/*/src/**/*.ts",
+    "../../packages/*/src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
