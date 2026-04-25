@@ -10,13 +10,17 @@ RUN cd apps/api && bun /app/node_modules/@nestjs/cli/bin/nest.js build
 FROM oven/bun:1 AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=builder /app/apps/api/dist ./dist
+# Root node_modules (.bun/ store lives here) + workspace-local symlinks
 COPY --from=builder /app/node_modules ./node_modules
-# Place workspace packages directly in node_modules (avoids symlink issues)
-COPY --from=builder /app/packages/shared ./node_modules/@pricing-ai/shared
-COPY --from=builder /app/packages/financial-model ./node_modules/@pricing-ai/financial-model
-COPY --from=builder /app/packages/sizing-engine ./node_modules/@pricing-ai/sizing-engine
-COPY --from=builder /app/packages/zod-schemas ./node_modules/@pricing-ai/zod-schemas
-COPY --from=builder /app/apps/api/prisma ./prisma
+COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
+# Built output and prisma schema
+COPY --from=builder /app/apps/api/dist ./apps/api/dist
+COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
+# Internal packages at their original paths (workspace symlinks point here)
+COPY --from=builder /app/packages/shared ./packages/shared
+COPY --from=builder /app/packages/financial-model ./packages/financial-model
+COPY --from=builder /app/packages/sizing-engine ./packages/sizing-engine
+COPY --from=builder /app/packages/zod-schemas ./packages/zod-schemas
+WORKDIR /app/apps/api
 EXPOSE 3001
 CMD ["bun", "dist/main.js"]
