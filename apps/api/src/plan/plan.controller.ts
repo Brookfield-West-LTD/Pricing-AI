@@ -35,7 +35,7 @@ export class PlanController {
   @Post('bill-upload')
   @UseInterceptors(FileInterceptor('file'))
   billUpload(
-    @UploadedFile() _file: Express.Multer.File,
+    @UploadedFile() _file: unknown,
     @Body('planId') _planId: string,
   ) {
     // Phase 2: wire Textract extraction here

@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Res } from '@nestjs/common'
-import type { Response } from 'express'
+import type { ServerResponse } from 'http'
 import { PriaService } from './pria.service'
 
 interface StreamDto {
@@ -12,7 +12,7 @@ export class PriaController {
   constructor(private pria: PriaService) {}
 
   @Post('stream')
-  async stream(@Body() body: StreamDto, @Res() res: Response) {
+  async stream(@Body() body: StreamDto, @Res() res: ServerResponse) {
     res.setHeader('Content-Type', 'text/event-stream')
     res.setHeader('Cache-Control', 'no-cache')
     res.setHeader('Connection', 'keep-alive')
