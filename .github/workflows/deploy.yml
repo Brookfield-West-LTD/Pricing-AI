@@ -48,6 +48,9 @@ jobs:
         run: |
           echo "${{ secrets.LIGHTSAIL_SSH_KEY }}" > /tmp/deploy_key
           chmod 600 /tmp/deploy_key
+          # Write ECR credentials to server so deploy.sh can authenticate
+          ssh -i /tmp/deploy_key -o StrictHostKeyChecking=no ubuntu@35.158.12.74 \
+            "sudo mkdir -p /root/.aws && printf '[default]\naws_access_key_id = %s\naws_secret_access_key = %s\nregion = eu-central-1\n' '${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}' '${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}' | sudo tee /root/.aws/credentials > /dev/null && sudo chmod 600 /root/.aws/credentials"
           ssh -i /tmp/deploy_key \
             -o StrictHostKeyChecking=no \
             ubuntu@35.158.12.74 \
