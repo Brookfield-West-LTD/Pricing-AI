@@ -5,6 +5,7 @@ WORKDIR /app
 RUN ln -sf $(which bun) /usr/local/bin/node
 COPY . .
 RUN bun install
+RUN cd apps/api && bunx prisma generate
 RUN cd apps/api && bun /app/node_modules/@nestjs/cli/bin/nest.js build
 
 FROM oven/bun:1 AS runner
