@@ -1,0 +1,12 @@
+**/node_modules
+**/.next
+**/dist
+.git
+.github
+**/*.log
+**/.env
+**/coverage
+preview
+screenshots
+ui_kits
+uploads
