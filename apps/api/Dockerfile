@@ -12,6 +12,8 @@ RUN bun install
 
 FROM oven/bun:1 AS builder
 WORKDIR /app
+# nest CLI has a node shebang; bun image ships without node — alias it
+RUN ln -sf $(which bun) /usr/local/bin/node
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN cd apps/api && /app/node_modules/.bin/nest build
