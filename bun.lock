@@ -5,6 +5,7 @@
     "": {
       "name": "pricing-ai",
       "devDependencies": {
+        "@nestjs/cli": "^11.0.0",
         "@types/node": "^20",
         "prettier": "^3",
         "turbo": "latest",
