@@ -1,18 +1,8 @@
 # Build context: monorepo root
-FROM oven/bun:1 AS deps
-WORKDIR /app
-COPY package.json bun.lock ./
-COPY apps/web/package.json ./apps/web/
-COPY packages/ui/package.json ./packages/ui/
-COPY packages/shared/package.json ./packages/shared/
-COPY packages/tokens/package.json ./packages/tokens/
-COPY packages/zod-schemas/package.json ./packages/zod-schemas/
-RUN bun install --ignore-scripts; test -d node_modules/next
-
 FROM oven/bun:1 AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN bun install
 ARG NEXT_PUBLIC_APP_URL=https://pricingai.metcoredigitech.com
 ARG NEXT_PUBLIC_API_URL=https://pricingai.metcoredigitech.com/nest
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
@@ -25,12 +15,10 @@ FROM oven/bun:1 AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-# Copy built output
 COPY --from=builder /app/apps/web/.next ./apps/web/.next
 COPY --from=builder /app/apps/web/public ./apps/web/public
 COPY --from=builder /app/apps/web/package.json ./apps/web/
 COPY --from=builder /app/apps/web/next.config.ts ./apps/web/
-# Copy node_modules, then override workspace packages directly (avoids symlink issues)
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/packages/ui ./node_modules/@pricing-ai/ui
 COPY --from=builder /app/packages/shared ./node_modules/@pricing-ai/shared
